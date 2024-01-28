@@ -1,22 +1,25 @@
 define(function () {
-    function MainLoop(render) {
-        this.render = render;
-        this.asd = 1;
+    function MainLoop(render, objects) {
+        this._objects = objects;
+		this._render = render;
+		
+		let ctx = this._render.getContext();
+        MainLoop.prototype.loop = function (seconds) {
+            this._render.clearScreen();
+            for (let i = 0; i < this._objects.length; i++) {
+				this._objects[i].update(seconds);
+				this._objects[i].draw(ctx, true);
 
-        MainLoop.prototype.loop = function () {
-            render.clearScreen();
-            let x = Math.floor(Math.random() * (200 - 1 + 1) + 1);
-            let y = Math.floor(Math.random() * (200 - 1 + 1) + 1);
-            render.drawRect(x, y, 56, 66, 'red');
-
+			}
+			
         }.bind(this);
 
 
     }
 
     return {
-        create: function (render) {
-            return new MainLoop(render);
+        create: function (render, objects) {
+            return new MainLoop(render, objects);
         }
     };
 });

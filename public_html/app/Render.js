@@ -1,36 +1,53 @@
-define(function () {
+define(function (require) {
     function Render() {
-        this.canvas;
-        this.context;
-        this.OffScreenCanvas;
-        this.ctxOffScrCanvas;
+        this._canvas;
+        this._context;
+        this._OffScreenCanvas;
+        this._ctxOffScrCanvas;
         //this.OffScreenCanvas = document.createElement('canvas');
         //this.OffScreenCanvas.height = width / 5;
         //this.OffScreenCanvas.width = width / 5;
         //this.ctxOffScrCanvas = this.OffScreenCanvas.getContext("2d");
-        this.height = 512;
-        this.width = 1024;
+        this._height = 512;
+        this._width = 1024;
+		this._requestAnimationFrame = require('./RequestAnimationFrame').create();
     }
 
+	Render.prototype.start = function (callback) {
+        this._requestAnimationFrame.start(callback);
+    };
+
+    Render.prototype.stop = function () {
+        this._requestAnimationFrame.stop();
+    };
+	
+	Render.prototype.getContext = function (canvas) {
+        return this._context;
+    };
+	
+	Render.prototype.drawObjects = function (objects) {
+		
+	};
+	
     Render.prototype.setCanvas = function (canvas) {
-        this.canvas = canvas;
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
-        this.context = this.canvas.getContext("2d");
-        this.context.msImageSmoothingEnabled = false;
-        this.context.mozImageSmoothingEnabled = false;
-        this.context.imageSmoothingEnabled = false;
+        this._canvas = canvas;
+        this._canvas.width = this._width;
+        this._canvas.height = this._height;
+        this._context = this._canvas.getContext("2d");
+        this._context.msImageSmoothingEnabled = false;
+        this._context.mozImageSmoothingEnabled = false;
+        this._context.imageSmoothingEnabled = false;
     };
 
     Render.prototype.drawRect = function (x, y, width, height, color) {
-        this.context.save();
-        this.context.fillStyle = color;
-        this.context.fillRect(x, y, width, height);
-        this.context.restore();
+        this._context.save();
+        this._context.fillStyle = color;
+        this._context.fillRect(x, y, width, height);
+        this._context.restore();
     };
 
     Render.prototype.clearScreen = function () {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     };
 
     return {
