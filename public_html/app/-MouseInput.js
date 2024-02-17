@@ -3,11 +3,11 @@ define(function () {
 		this._lastX;
 		this._lastY;
 		this._isMouseDown = false;
-		this._mouseDownObservers = new Map();
-		this._mouseUpObservers = new Map();
-		this._mouseMoveObservers = new Map();
-		this._mouseDblClickObservers = new Map();
-		this._mouseClickObservers = new Map();
+		this._mouseDownObservers = [];
+		this._mouseUpObservers = [];
+		this._mouseMoveObservers = [];
+		this._mouseDblClickObservers = [];
+		this._mouseClickObservers = [];
 		this._canvas;
 		this.t = Date.now();
 
@@ -68,18 +68,18 @@ define(function () {
 			this._lastY = event.clientY - rect.top;
 		},
 	
-		subscribe: function (e, fn, id) {
+		subscribe: function (e, fn) {
 			if (typeof e === 'string' && typeof fn === 'function') {
 				if (e === 'mousedown') {
-					this._mouseDownObservers.set(id, fn);
+					this._mouseDownObservers.push(fn);
 				} else if (e === 'mouseup') {
-					this._mouseUpObservers.set(id, fn);
+					this._mouseUpObservers.push(fn);
 				} else if (e === 'mousemove') {
-					this._mouseMoveObservers.set(id, fn);
+					this._mouseMoveObservers.push(fn);
 				} else if (e === 'dblclick') {
-					this._mouseDblClickObservers.set(id, fn);
+					this._mouseDblClickObservers.push(fn);
 				} else if (e === 'click') {
-					this._mouseClickObservers.set(id, fn);
+					this._mouseClickObservers.push(fn);
 				} else {
 					throw new Error('Invalid parameter');
 				}
@@ -88,18 +88,20 @@ define(function () {
 			}
 		},
 	
-		unsubscribe: function (e, id) {
-			if (typeof e === 'string') {
+		unsubscribe: function (e, fn) {
+			if (typeof e === 'string' && typeof fn === 'function') {
 				if (e === 'mousedown') {
-					this._mouseDownObservers.delete(id);
+					console.log(this._mouseDownObservers)
+					this._mouseDownObservers = this._mouseDownObservers.filter(v => v !== fn);
+					console.log(this._mouseDownObservers)
 				} else if (e === 'mouseup') {
-					this._mouseUpObservers.delete(id);
+					this._mouseUpObservers = this._mouseUpObservers.filter(v => v !== fn);
 				} else if (e === 'mousemove') {
-					this._mouseMoveObservers.delete(id);
+					this._mouseMoveObservers = this._mouseMoveObservers.filter(v => v !== fn);
 				} else if (e === 'dblclick') {
-					this._mouseDblClickObservers.delete(id);
+					this._mouseDblClickObservers = this._mouseDblClickObservers.filter(v => v !== fn);
 				} else if (e === 'click') {
-					this._mouseClickObservers.delete(id);
+					this._mouseClickObservers = this._mouseClickObservers.filter(v => v !== fn);
 				} else {
 					throw new Error('Invalid parameter');
 				}
@@ -109,33 +111,23 @@ define(function () {
 		},
 		
 		_notifyMouseDown: function (data) {
-			for (let fn of this._mouseDownObservers.values()) {
-				fn(data);
-			}
+			this._mouseDownObservers.forEach(v => v(data));
 		},
 	
 		_notifyMouseUp: function (data) {
-			for (let fn of this._mouseUpObservers.values()) {
-				fn(data);
-			}
+			this._mouseUpObservers.forEach(v => v(data));
 		},
 	
 		_notifyMouseMove: function (data) {
-			for (let fn of this._mouseMoveObservers.values()) {
-				fn(data);
-			}
+			this._mouseMoveObservers.forEach(v => v(data));
 		},
 	
 		_notifyMouseDblClick: function (data) {
-			for (let fn of this._mouseDblClickObservers.values()) {
-				fn(data);
-			}
+			this._mouseDblClickObservers.forEach(v => v(data));
 		},
 		
 		_notifyMouseClick: function (data) {
-			for (let fn of this._mouseClickObservers.values()) {
-				fn(data);
-			}
+			this._mouseClickObservers.forEach(v => v(data));
 		}
 	};
 	

@@ -2,24 +2,26 @@
 
 define(function (require) {
 	
+	let updateTime = document.getElementById("updateTime");
+	
 	let canvas = document.getElementById("schemaView");
-	
-	let render = require('./Render').create();
+	let requestAnimationFrame = require('./RequestAnimationFrameFactory').create();
+	let render = require('./RenderFactory').create(requestAnimationFrame);
     render.setCanvas(canvas);
-	
-	let mouseinput = require('./MouseInput').create(canvas);
 
-	let mutex = require('./CaptureMutex').create();
+	let mouseInput = require('./MouseInputFactory').create(canvas);
+    
+	let mutex = require('./MutexFactory').create();
+		
+	let objectManager = require('./ObjectManagerFactory').create(mouseInput, render, mutex);
 	
-	let objectManager = require('./ObjectManager').create(mouseinput, render, mutex);
+	let serializer = require('./SerializerFactory').create(objectManager);
 	
-	let saver = require('./Saver').create(objectManager);
-	let leftPanel = require('./LeftPanel').create(mouseinput, objectManager, 40, 500, saver);
-
+	let leftPanel = require('./LeftPanelFactory').create(mouseInput, objectManager, 40, 500, serializer);	
 	
 	
-	let mainLoop = require('./MainLoop').create(render, [objectManager, leftPanel]);
 	
+	let mainLoop = require('./MainLoopFactory').create(updateTime, render, objectManager, leftPanel);
 	render.start(mainLoop.loop);
    
 });
