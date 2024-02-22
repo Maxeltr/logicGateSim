@@ -4,6 +4,8 @@ define(function (require) {
 	
 	let updateTime = document.getElementById("updateTime");
 	
+	
+	
 	let canvas = document.getElementById("schemaView");
 	let requestAnimationFrame = require('./RequestAnimationFrameFactory').create();
 	let render = require('./RenderFactory').create(requestAnimationFrame);

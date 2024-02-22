@@ -1,7 +1,8 @@
 define(['./WireDrawComponent'], function (WireDrawComponent) {
 	return {
 		create: function(object) {
-			return new WireDrawComponent(object);
+			let drawWireNumbers = document.getElementById("drawWireNumbers");
+			return new WireDrawComponent(object, drawWireNumbers);
 		}
 	};
 });

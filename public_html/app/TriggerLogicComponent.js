@@ -81,5 +81,9 @@ define(function () {
 		return this._reducingType;
 	};
 	
+	TriggerLogicComponent.prototype.getExpression = function() {
+		return 'Trigger';
+	};
+	
 	return TriggerLogicComponent;
 });

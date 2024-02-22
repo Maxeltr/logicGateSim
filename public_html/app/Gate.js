@@ -28,237 +28,239 @@ define(function () {
 		this._y = y;
 		
     }
+
+	Gate.prototype.correctPosition = function () {
+		this._positionComponent.correctPosition();
+	};
 	
-	Gate.prototype = {
-		correctPosition: function () {
-			this._positionComponent.correctPosition();
-		},
+	Gate.prototype.isCoordinatesMatch = function (x, y) {
+		return this._positionComponent.isCoordinatesMatch(x, y);
+	};
+	
+	Gate.prototype.isLeftSideCoordinatesMatch = function (x, y) {
+		return this._positionComponent.isLeftSideCoordinatesMatch(x, y);
+	};
+	
+	Gate.prototype.isRightSideCoordinatesMatch = function (x, y) {
+		return this._positionComponent.isRightSideCoordinatesMatch(x, y);
+	};
+	
+	Gate.prototype.getId = function () {
+		return this._id;
+	};
 		
-		isCoordinatesMatch: function (x, y) {
-			return this._positionComponent.isCoordinatesMatch(x, y);
-		},
+	Gate.prototype.getOutputCoordinates = function (numberOutput) {
+		return this._positionComponent.getOutputCoordinates(numberOutput);
+	}; 
+	
+	Gate.prototype.getInputCoordinates = function (numberInput) {
+		return this._positionComponent.getInputCoordinates(numberInput);
+	};
+	
+	Gate.prototype.getRadius = function () {
+		return this._radius;
+	};
+	
+	Gate.prototype.getType = function () {
+		return this._logicComponent.getType();
+	};
+	
+	Gate.prototype.getReducingType = function () {
+		return this._logicComponent.getReducingType();
+	};
+	
+	Gate.prototype.getName = function () {
+		return this._name;
+	};
+	
+	Gate.prototype.getLeftX = function () {
+		return this._leftX;
+	};
 		
-		isLeftSideCoordinatesMatch: function (x, y) {
-			return this._positionComponent.isLeftSideCoordinatesMatch(x, y);
-		},
+	Gate.prototype.getRightX = function () {
+		return this._rightX;
+	};
 		
-		isRightSideCoordinatesMatch: function (x, y) {
-			return this._positionComponent.isRightSideCoordinatesMatch(x, y);
-		},
+	Gate.prototype.getTopY = function () {
+		return this._topY;
+	};
+	
+	Gate.prototype.getBottomY = function () {
+		return this._bottomY;
+	};
+	
+	Gate.prototype.getX = function () {
+		return this._x;
+	};
+	
+	Gate.prototype.getY = function () {
+		return this._y;
+	};
+	
+	Gate.prototype.getInputs = function () {
+		return this._inputsComponent.getInputs();
+	};
+	
+	Gate.prototype.getInput = function(id) {
+		return this._inputsComponent.getInput(id);
+	};
 		
-		getId: function () {
-			return this._id;
-		},
+	Gate.prototype.getOutputs = function () {
+		return this._outputsComponent.getOutputs();
+	};
+	
+	Gate.prototype.getInvertedInputs = function () {
+		return this._inputsComponent.getInvertedInputs();
+	};
+	
+	Gate.prototype.isInputInverted = function (id) {
+		return this._inputsComponent.isInputInverted(id);
+	};
+	
+	Gate.prototype.invertInput = function (id) {
+		this._inputsComponent.invertInput(id);
+	};
+	
+	Gate.prototype.isOutputInverted = function () {
+		return this._outputsComponent.isOutputInverted();
+	};
+	
+	Gate.prototype.invertOutput = function () {
+		this._outputsComponent.invertOutput();
+	};
+	
+	Gate.prototype.isActivated = function() {
+		return this._logicComponent.isActivated();
+	};
+	
+	Gate.prototype.getLogicComponent = function () {
+		return this._logicComponent;
+	};
 		
-		getOutputCoordinates: function (numberOutput) {
-			return this._positionComponent.getOutputCoordinates(numberOutput);
-		}, 
+	Gate.prototype.getOutputsComponent = function () {
+		return this._outputsComponent;
+	};
+	
+	Gate.prototype.getInputsComponent = function () {
+		return this._inputsComponent;
+	};
+	
+	Gate.prototype.getPositionComponent = function () {
+		return this._positionComponent;
+	};
+	
+	Gate.prototype.getDrawComponent = function () {
+		return this._drawComponent;
+	};
+	
+	Gate.prototype.getTextInputComponent = function () {
+		return this._textInputComponent;
+	};
+	
+	Gate.prototype.setType = function (type) {
+		return this._logicComponent.setType(type);
+	};
+	
+	Gate.prototype.setName = function (name) {
+		this._name = name;
+	};
 		
-		getInputCoordinates: function (numberInput) {
-			return this._positionComponent.getInputCoordinates(numberInput);
-		},
+	Gate.prototype.setLeftX = function (x) {
+		this._leftX = x;
+	};
+	
+	Gate.prototype.setRightX = function (x) {
+		this._rightX = x;
+	};
+	
+	Gate.prototype.setTopY = function (y) {
+		this._topY = y;
+	};
+	
+	Gate.prototype.setBottomY = function (y) {
+		this._bottomY = y;
+	};
+	
+	Gate.prototype.setX = function (x) {
+		this._x = x;
+	};
+	
+	Gate.prototype.setY = function (y) {
+		this._y = y;
+	};
+	
+	Gate.prototype.setLogicComponent = function (logicComponent) {
+		this._logicComponent = logicComponent;
+	};
+	
+	Gate.prototype.setOutputsComponent = function (outputsComponent) {
+		this._outputsComponent = outputsComponent;
+	};
 		
-		getRadius: function () {
-			return this._radius;
-		},
-		
-		getType: function () {
-			return this._logicComponent.getType();
-		},
-		
-		getReducingType: function () {
-			return this._logicComponent.getReducingType();
-		},
-		
-		getName: function () {
-			return this._name;
-		},
-		
-		getLeftX: function () {
-			return this._leftX;
-		},
-		
-		getRightX: function () {
-			return this._rightX;
-		},
-		
-		getTopY: function () {
-			return this._topY;
-		},
-		
-		getBottomY: function () {
-			return this._bottomY;
-		},
-		
-		getX: function () {
-			return this._x;
-		},
-		
-		getY: function () {
-			return this._y;
-		},
-		
-		getInputs: function () {
-			return this._inputsComponent.getInputs();
-		},
-		
-		getInput: function(id) {
-			return this._inputsComponent.getInput(id);
-		},
-		
-		getOutputs: function () {
-			return this._outputsComponent.getOutputs();
-		},
-		
-		getInvertedInputs: function () {
-			return this._inputsComponent.getInvertedInputs();
-		},
-		
-		isInputInverted: function (id) {
-			return this._inputsComponent.isInputInverted(id);
-		},
-		
-		invertInput: function (id) {
-			this._inputsComponent.invertInput(id);
-		},
-		
-		isOutputInverted: function () {
-			return this._outputsComponent.isOutputInverted();
-		},
-		
-		invertOutput: function () {
-			this._outputsComponent.invertOutput();
-		},
-		
-		isActivated: function() {
-			return this._logicComponent.isActivated();
-		},
-		
-		getLogicComponent: function () {
-			return this._logicComponent;
-		},
-		
-		getOutputsComponent: function () {
-			return this._outputsComponent;
-		},
-		
-		getInputsComponent: function () {
-			return this._inputsComponent;
-		},
-		
-		getPositionComponent: function () {
-			return this._positionComponent;
-		},
-		
-		getDrawComponent: function () {
-			return this._drawComponent;
-		},
-		
-		getTextInputComponent: function () {
-			return this._textInputComponent;
-		},
-		
-		setType: function (type) {
-			return this._logicComponent.setType(type);
-		},
-		
-		setName: function (name) {
-			this._name = name;
-		},
-		
-		setLeftX: function (x) {
-			this._leftX = x;
-		},
-		
-		setRightX: function (x) {
-			this._rightX = x;
-		},
-		
-		setTopY: function (y) {
-			this._topY = y;
-		},
-		
-		setBottomY: function (y) {
-			this._bottomY = y;
-		},
-		
-		setX: function (x) {
-			this._x = x;
-		},
-		
-		setY: function (y) {
-			this._y = y;
-		},
-		
-		setLogicComponent: function (logicComponent) {
-			this._logicComponent = logicComponent;
-		},
-		
-		setOutputsComponent: function (outputsComponent) {
-			this._outputsComponent = outputsComponent;
-		},
-		
-		setInputsComponent: function (inputsComponent) {
-			this._inputsComponent = inputsComponent;
-		},
-		
-		setPositionComponent: function (positionComponent) {
-			this._positionComponent = positionComponent;
-		},
-		
-		setDrawComponent: function (drawComponent) {
-			this._drawComponent = drawComponent;
-		},
-		
-		setTextInputComponent: function (textInputComponent) {
-			this._textInputComponent = textInputComponent;
-		},
-		
-		setOption: function (propertyName, propertyValue) {
-			if (propertyName === 'name') {
-				this.setName(propertyValue + '');
-			}
-		},
-		
-		addWireToOutput: function (wire) {
-			this._outputsComponent.addWireToOutput(wire);
-		},
-		
-		deleteWireFromOutput: function(wire) {
-			this._outputsComponent.deleteWireFromOutput(wire);
-		},
-		
-		addWireToInputs: function(wire) {
-			this._inputsComponent.addWireToInputs(wire);
-		},
-		
-		deleteWireFromInputs: function(wire) {
-			this._inputsComponent.deleteWireFromInputs(wire);
-		},
-		
-		setUpdateNumber: function(updateNumber) {
-			this._updateNumber = updateNumber;
-		},
-		
-		getUpdateNumber: function() {
-			return this._updateNumber;
-		},
-		
-		remove: function() {
-			this._positionComponent.unsubscribeAll();
-			this._textInputComponent.unsubscribeAll();
-		},
-		
-		update: function (seconds, updateNumber) {
-			this._logicComponent.update(seconds, updateNumber);
-		},
-		
-		draw: function (ctx, debug = false, number) {
-			this._drawComponent.draw(ctx, debug, number);
+	Gate.prototype.setInputsComponent = function (inputsComponent) {
+		this._inputsComponent = inputsComponent;
+	};
+	
+	Gate.prototype.setPositionComponent = function (positionComponent) {
+		this._positionComponent = positionComponent;
+	};
+	
+	Gate.prototype.setDrawComponent = function (drawComponent) {
+		this._drawComponent = drawComponent;
+	};
+	
+	Gate.prototype.setTextInputComponent = function (textInputComponent) {
+		this._textInputComponent = textInputComponent;
+	};
+	
+	Gate.prototype.setOption = function (propertyName, propertyValue) {
+		if (propertyName === 'name') {
+			this.setName(propertyValue + '');
 		}
 	};
 	
-	Gate.prototype.constructor = Gate;
+	Gate.prototype.addWireToOutput = function (wire) {
+		this._outputsComponent.addWireToOutput(wire);
+	};
+	
+	Gate.prototype.deleteWireFromOutput = function(wire) {
+		this._outputsComponent.deleteWireFromOutput(wire);
+	};
+		
+	Gate.prototype.addWireToInputs = function(wire) {
+		this._inputsComponent.addWireToInputs(wire);
+	};
+	
+	Gate.prototype.deleteWireFromInputs = function(wire) {
+		this._inputsComponent.deleteWireFromInputs(wire);
+	};
+	
+	Gate.prototype.setUpdateNumber = function(updateNumber) {
+		this._updateNumber = updateNumber;
+	};
+	
+	Gate.prototype.getUpdateNumber = function() {
+		return this._updateNumber;
+	};
+	
+	Gate.prototype.remove = function() {
+		this._positionComponent.unsubscribeAll();
+		this._textInputComponent.unsubscribeAll();
+	};
+	
+	Gate.prototype.update = function (seconds, updateNumber) {
+		this._logicComponent.update(seconds, updateNumber);
+	};
+	
+	Gate.prototype.draw = function (ctx, debug = false, number) {
+		this._drawComponent.draw(ctx, debug, number);
+	};
+	
+	Gate.prototype.getExpression = function () {
+		return this._logicComponent.getExpression();
+	};
+	
+	//Gate.prototype.constructor = Gate;
 	
 	return Gate;
 });

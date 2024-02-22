@@ -83,5 +83,9 @@ define(function () {
 		return this._reducingType;
 	};
 	
+	TimerLogicComponent.prototype.getExpression = function() {
+		return 't';
+	};
+	
 	return TimerLogicComponent;
 });

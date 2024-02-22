@@ -47,7 +47,6 @@ define(function () {
 	}
 	
 	MainLoop.prototype.slowUpdate = function (seconds) {
-
 		if (this.index === 0) {									//start loop
 			this.objects = this._objectManager.getUpdateObjects();
 			
