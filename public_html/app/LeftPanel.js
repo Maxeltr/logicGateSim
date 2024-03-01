@@ -21,9 +21,9 @@ define(function () {
 			} else if (mouseInput.lastY() > 25 && mouseInput.lastY() < 35) {
 				this.objectToCreate = 'BI';
 			} else if (mouseInput.lastY() > 40 && mouseInput.lastY() < 55) {
-				this.objectToCreate = '&';
+				this.objectToCreate = 'AND';
 			} else if (mouseInput.lastY() > 60 && mouseInput.lastY() < 75) {
-				this.objectToCreate = '1';
+				this.objectToCreate = 'OR';
 			} else if (mouseInput.lastY() > 80 && mouseInput.lastY() < 95) {
 				this.objectToCreate = 'timer';
 			} else if (mouseInput.lastY() > 100 && mouseInput.lastY() < 115) {

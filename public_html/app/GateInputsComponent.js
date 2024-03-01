@@ -41,11 +41,7 @@ define(function () {
 	GateInputsComponent.prototype.getInput = function(id) {
 		return this._inputs.get(id);
 	};
-	
-	/* deleteInput: function(id) {
-		this._inputs.delete(wire.getId());
-	}, */
-	
+
 	GateInputsComponent.prototype.getInputs = function() {
 		return this._inputs;
 	};
@@ -56,6 +52,15 @@ define(function () {
 	
 	GateInputsComponent.prototype.isInputInverted = function(id) {
 		return this._invertedInputs.includes(id);
+	};
+	
+	GateInputsComponent.prototype.deleteInputs = function() {
+		for (let wire of this._object.getInputs().values()) {		//disconnect wire from inputs
+			wire.deleteEnd1();
+		}
+		this._inputs.clear();
+		this._invertedInputs = [];
+		this._object.correctPosition();
 	};
 	
 	return GateInputsComponent;

@@ -7,6 +7,7 @@ define(function () {
 		this._drawNumber = false;
 		this._drawWireNumbersInput = drawWireNumbers;
 		this._drawWireNumbersInput.addEventListener('change', this._onChange.bind(this));
+		this._drawNumber = this._drawWireNumbersInput.checked;
 	}
 
 	WireDrawComponent.prototype._onChange = function (e) {
@@ -34,8 +35,8 @@ define(function () {
 			ctx.textBaseline = "bottom";
 			ctx.fillText(num, polyline[0] + 5, polyline[1]);
 			ctx.fillText(num, polyline[polyLength - 4 ] + 5, polyline[polyLength - 3]);
-			ctx.restore();
 		}
+		ctx.restore();
 	};
 		
 	WireDrawComponent.prototype._chooseColor = function (ctx) {

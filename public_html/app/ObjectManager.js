@@ -1,5 +1,5 @@
 define(function (require) {
-	function ObjectManager(mouseinput, render, mutex) {
+	function ObjectManager(mouseinput, render, mutex, expression) {
 		this._mouseinput;
 		this._gates = new Map();
 		this._links = new Map();
@@ -12,6 +12,7 @@ define(function (require) {
 		this._wire = require('./WireFactory'); 
 		this._mutex = mutex;
 		this._mouseinput = mouseinput;
+		this._expression = expression;
 		//this.index = 0;
 		//this.passedTime = 0;
 		//this.timeSlice = 0;
@@ -68,7 +69,15 @@ define(function (require) {
 	};
 		
 	ObjectManager.prototype.createGate = function (id, x, y, type) {
-		let gate = this._gate.create(id, this._mouseinput, this._mutex, x, y, type);
+		let t;
+		if (type === '&') {
+			t = 'AND';
+		} else if (type === '1') {
+			t = 'OR';
+		} else {
+			t = type;
+		}
+		let gate = this._gate.create(id, this._mouseinput, this._mutex, x, y, t);
 		this._gates.set(id, gate);
 		return gate;
 	};
@@ -117,6 +126,7 @@ define(function (require) {
 			if (object.getX() < x2 && object.getY() > y1 && object.getY() < y2) {
 				this._gates.delete(object.getId());
 				object.remove();
+				
 			}
 		}
 		for (let object of this._binaryInputs.values()) {
@@ -146,7 +156,7 @@ define(function (require) {
 			this.createBinaryInput(this.uuidv4(), x, y);
 		} else if (name === 'wire') {
 			this.createWire(this.uuidv4(), x, y);
-		} else if (name === '&' || name === '1') {
+		} else if (name === 'AND' || name === 'OR' || name === '&' || name === '1') {
 			this.createGate(this.uuidv4(), x, y, name);
 		} else if (name === 'timer') {
 			this.createTimer(this.uuidv4(), x, y, name);
@@ -172,10 +182,58 @@ define(function (require) {
 	};
 	
 	ObjectManager.prototype.traverseMap = function() {
-		
-		for (let object of this._gates.values()) {
-			console.log(object.getExpression());
+		let val = '';
+		/* for (let gate of this._gates.values()) {
+			gate.resetIsVisited();
+			gate.val = '';
+		} */
+		let out = '';
+		for (let gate of this._gates.values()) {
+			for (let wire of gate.getOutputs().values()) {
+				let end1 = wire.getEnd1();
+				if (typeof end1 === 'undefined') {
+					for (let gate of this._gates.values()) {
+						gate.resetIsVisited();
+						gate.setTraverseExpression('');
+					}
+					out += 'w' + wire.getEnd0().getUpdateNumber() + ' = ' + this._traverse(gate) + '\n';
+					
+				}
+			}
+			
+			
+			//console.log(val);
 		}
+		this._output(out);
+	};
+	
+	ObjectManager.prototype._traverse = function(node) {
+		if (node.isVisited()) {
+			return node.getTraverseExpression().length === 0 ? 'w' + node.getUpdateNumber() : node.getTraverseExpression();
+		}
+		node.setIsVisited();
+		let tempVal = '';
+		for (let wire of node.getInputs().values()) {
+			let end0 = wire.getEnd0();
+			let inversion = node.isInputInverted(wire.getId()) ? '!' : '';
+			if (typeof end0 !== 'undefined') {
+				if (end0.constructor.name === 'BinaryInput') {
+					tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + end0.getExpression() : inversion + end0.getExpression();
+				} else {
+					tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + this._traverse(end0) : inversion + this._traverse(end0);
+				}
+			} else {
+				tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + end0 : inversion + end0;
+			}
+		}
+		inversion = node.isOutputInverted() ? '!' : '';
+		node.setTraverseExpression(inversion + '(' + tempVal + ')');
+		
+		return node.getTraverseExpression();
+	};
+	
+	ObjectManager.prototype._output = function (data) {
+		this._expression.value = data;
 	};
 	
 	return ObjectManager;

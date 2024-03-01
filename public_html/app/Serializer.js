@@ -84,6 +84,11 @@ define(function () {
 	};
 	
 	Serializer.prototype.load = function () {
+		this._links.clear();
+		this._binaryInputs.clear();
+		this._inputsToAddToGates.clear();
+		this._outputsToAddToGates.clear();
+		this._invertedGateInputs.clear();
 		let data = document.getElementById('dataToSave').value;
 		data = data.split('\n');
 		let objectAmount = data[0];

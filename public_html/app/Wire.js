@@ -116,6 +116,14 @@ define(function () {
 	Wire.prototype.remove = function() {
 		this._positionComponent.unsubscribeAll();
 		this._textInputComponent.unsubscribeAll();
+		if (typeof this._end0 !== 'undefined') {
+			this._end0.deleteWireFromOutput(this);
+			this.deleteEnd0();
+		}
+		if (typeof this._end1 !== 'undefined') {
+			this._end1.deleteWireFromInputs(this);
+			this.deleteEnd1();
+		}
 	};
 	
 	Wire.prototype.update = function () {
@@ -125,8 +133,6 @@ define(function () {
 	Wire.prototype.draw = function (ctx, debug = false) {
 		this._drawComponent.draw(ctx, debug);
 	};
-		
-	//Wire.prototype.constructor = Wire;
 	
 	return Wire;
 });

@@ -6,6 +6,7 @@ define(function () {
 		this._settingTime = 0;
 		this._type = 'Timer';
 		this._reducingType = 'T';
+		this._traverseExpression = '';
 	}
 	
 	TimerLogicComponent.prototype.isActivated = function() {
@@ -84,7 +85,18 @@ define(function () {
 	};
 	
 	TimerLogicComponent.prototype.getExpression = function() {
-		return 't';
+		return 'Timer';
+	};
+	
+	TimerLogicComponent.prototype.getTraverseExpression = function() {
+		return this._traverseExpression;
+	};
+	
+	TimerLogicComponent.prototype.setTraverseExpression = function(expr) {
+		if (typeof expr !== 'string') {
+			throw new Error('Invalid parameter');
+		}
+		this._traverseExpression = expr;
 	};
 	
 	return TimerLogicComponent;

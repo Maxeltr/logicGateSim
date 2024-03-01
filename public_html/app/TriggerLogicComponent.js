@@ -5,6 +5,7 @@ define(function () {
 		this._type = 'Trigger';
 		this._reducingType = 'RS';
 		this._outputState = false;
+		this._traverseExpression = '';
 	}
 	
 	TriggerLogicComponent.prototype._getState = function() {
@@ -83,6 +84,17 @@ define(function () {
 	
 	TriggerLogicComponent.prototype.getExpression = function() {
 		return 'Trigger';
+	};
+	
+	TriggerLogicComponent.prototype.getTraverseExpression = function() {
+		return this._traverseExpression;
+	};
+	
+	TriggerLogicComponent.prototype.setTraverseExpression = function(expr) {
+		if (typeof expr !== 'string') {
+			throw new Error('Invalid parameter');
+		}
+		this._traverseExpression = expr;
 	};
 	
 	return TriggerLogicComponent;

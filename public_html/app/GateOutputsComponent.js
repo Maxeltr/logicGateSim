@@ -37,5 +37,12 @@ define(function () {
 		return this._outputs;
 	};
 	
+	GateOutputsComponent.prototype.deleteOutputs = function() {
+		for (let wire of this._object.getOutputs().values()) {		//disconnect wire from outputs
+			wire.deleteEnd0();
+		}
+		this._outputs.clear();
+	};
+	
 	return GateOutputsComponent;
 });

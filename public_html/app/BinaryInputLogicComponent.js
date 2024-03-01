@@ -4,6 +4,7 @@ define(function () {
 		this._isActivated = false;
 		this._type = 'BinaryInput';
 		this._reducingType = 'BI';
+		this._traverseExpression = '';
 	}
 	
 	BinaryInputLogicComponent.prototype.isActivated = function() {
@@ -36,6 +37,21 @@ define(function () {
 	
 	BinaryInputLogicComponent.prototype.setType = function(type) {
 		this._type = type;
+	};
+	
+	BinaryInputLogicComponent.prototype.getExpression = function() {
+		return 'BI' + this._object.getUpdateNumber();
+	};
+	
+	BinaryInputLogicComponent.prototype.getTraverseExpression = function() {
+		return this._traverseExpression;
+	};
+	
+	BinaryInputLogicComponent.prototype.setTraverseExpression = function(expr) {
+		if (typeof expr !== 'string') {
+			throw new Error('Invalid parameter');
+		}
+		this._traverseExpression = expr;
 	};
 	
 	return BinaryInputLogicComponent;

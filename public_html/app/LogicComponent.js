@@ -1,21 +1,30 @@
 define(function () {
     function LogicComponent(object, type) {
 		this._object = object;
-		this._availableTypes = ['&', '1'];
-		this._type = '&';
+		this._availableTypes = ['AND', 'OR'];
+		this._type = 'AND';
 		this._reducingType = '&';
 		this._isActivated = false;
 		this._expression = '';
+		this._traverseExpression = '';
 		
 		if (typeof type !== 'string') {
-			throw new Error('Invalid parameter id');
+			throw new Error('Invalid parameter');
 		}
 		if (this._availableTypes.includes(type)) { 
 			this._type = type;
-			this._reducingType = type;
+			this._setReducingType();
 		}
 	}
 
+	LogicComponent.prototype._setReducingType = function() {	
+		if (this._type === 'AND') {
+			this._reducingType = '&';
+		} else if (this._type === 'OR') {
+			this._reducingType = '1';
+		}
+	};
+	
 	LogicComponent.prototype.and = function() {								//TODO refactor
 		let result = true, inputState = false;
 		if (this._object.getInputs().size > 0 ) {
@@ -93,31 +102,31 @@ define(function () {
 	LogicComponent.prototype.setType = function(type) {
 		if (this._availableTypes.includes(type)) { 
 			this._type = type;
-			this._reducingType = type;
+			this._setReducingType();
 		}
 	};
 	
 	LogicComponent.prototype.update = function(seconds, updateNumber) {
 		this._object.setUpdateNumber(updateNumber);
-		if (this._type === '&') {
+		if (this._type === 'AND') {
 			this._isActivated = this.and();
-		} else if (this._type === '1') {
+		} else if (this._type === 'OR') {
 			this._isActivated = this.or();
 		}
 	};
 	
 	LogicComponent.prototype.getExpression = function() {
 		let exp = '(', type;
-		if (this._type === '&') {
+		/* if (this._type === 'AND') {
 			type = 'AND';
-		} else if (this._type === '1') {
+		} else if (this._type === 'OR') {
 			type = 'OR';
-		}
+		} */
 		if (this._object.getInputs().size > 0 ) {
 			let i = 0;
 			for (let wire of this._object.getInputs().values()) {
 				if (typeof wire.getEnd0() !== 'undefined') {
-					if (i !==0) exp = exp + ' ' + type + ' ';
+					if (i !==0) exp = exp + ' ' + this._ + ' ';
 					if (this._object.getInvertedInputs().includes(wire.getId())) {	//if wire is inverted
 						exp = exp + '!' + 'w' + wire.getEnd0().getUpdateNumber();
 					} else {
@@ -127,9 +136,20 @@ define(function () {
 				i++;
 			}
 		}
-		this._expression = exp.length !== 1 ? exp + ')' : '';
-		
+		//exp = exp.length !== 1 ? exp + ')' : '';
+		exp = exp + ')'
+		if (this._object.isOutputInverted()) exp = '!' + exp;
+		this._expression = exp;
+	
 		return this._expression;
+	};
+	
+	LogicComponent.prototype.getTraverseExpression = function() {
+		return this._traverseExpression;
+	};
+	
+	LogicComponent.prototype.setTraverseExpression = function(expr) {
+		this._traverseExpression = expr;
 	};
 	
 	return LogicComponent;

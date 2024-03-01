@@ -16,6 +16,7 @@ define(function () {
 		this._textInputComponent;
 		this._radius = 3;
 		this._updateNumber = 0;
+		this._isVisited = false;
 		
 		if (typeof id !== 'string') {
 			throw new Error('Invalid parameter id');
@@ -29,6 +30,18 @@ define(function () {
 		
     }
 
+	Gate.prototype.isVisited = function () {
+		return this._isVisited;
+	};
+	
+	Gate.prototype.setIsVisited = function () {
+		this._isVisited = true;
+	};
+	
+	Gate.prototype.resetIsVisited = function () {
+		this._isVisited = false;
+	};
+	
 	Gate.prototype.correctPosition = function () {
 		this._positionComponent.correctPosition();
 	};
@@ -246,6 +259,8 @@ define(function () {
 	Gate.prototype.remove = function() {
 		this._positionComponent.unsubscribeAll();
 		this._textInputComponent.unsubscribeAll();
+		this._inputsComponent.deleteInputs();
+		this._outputsComponent.deleteOutputs();
 	};
 	
 	Gate.prototype.update = function (seconds, updateNumber) {
@@ -260,7 +275,13 @@ define(function () {
 		return this._logicComponent.getExpression();
 	};
 	
-	//Gate.prototype.constructor = Gate;
+	Gate.prototype.getTraverseExpression = function() {
+		return this._logicComponent.getTraverseExpression();
+	};
+	
+	Gate.prototype.setTraverseExpression = function(expr) {
+		this._logicComponent.setTraverseExpression(expr);
+	};
 	
 	return Gate;
 });
