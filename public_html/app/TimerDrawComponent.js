@@ -16,7 +16,8 @@ define(['./GateDrawComponent'], function (GateDrawComponent) {
 		ctx.lineTo(this._object.getLeftX(), this._object.getTopY());
 		
 		ctx.textBaseline = "bottom";
-		ctx.fillText(this._object.getReducingType(), this._object.getX(), this._object.getY());
+		//ctx.font = "10px serif";
+		ctx.fillText(this._object.getReducingType(), this._object.getX() - 7, this._object.getY());
 		ctx.fillText(this._object.getUpdateNumber() + ' ' + this._object.getName(), this._object.getLeftX(), this._object.getTopY());
 		let timeSetting = this._object.getTimeSetting();
 		ctx.fillText(timeSetting, this._object.getLeftX(), this._object.getBottomY());

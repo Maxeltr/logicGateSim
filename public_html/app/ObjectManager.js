@@ -83,7 +83,7 @@ define(function (require) {
 	};
 	
 	ObjectManager.prototype.createTimer = function (id, x, y, type) {
-		let timer = this._timer.create(id, this._mouseinput, this._mutex, x, y, type);
+		let timer = this._timer.create(id, this._mouseinput, this._mutex, x, y, 'On');
 		this._gates.set(id, timer);
 		return timer;
 	};

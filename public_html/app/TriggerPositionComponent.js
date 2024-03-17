@@ -1,29 +1,29 @@
 define(['./GatePositionComponent'], function (GatePositionComponent) {
-    function TriggerPositionComponent(object, mouseinput, mutex) {
-		this._object = object;
+    function TriggerPositionComponent(object, mouseinput, mutex, lockInput) {
+		GatePositionComponent.apply(this, arguments);
+		/* this._object = object; */
 		this._width = 30;
-		this._height = 40;
+		/* this._height = 40;
 		this._initialHeight = 40;
 		this._captured = false;
 		this._capturedDeltaX = 0;
 		this._capturedDeltaY = 0;
 		this._mutex = mutex;	//TODO is there mutex in js?
-		
 		this._mouseinput = mouseinput;
 		this._mouseinput.subscribe('mousedown', this._onMouseDown.bind(this), this._object.getId());
 		this._mouseinput.subscribe('mouseup', this._onMouseUp.bind(this), this._object.getId());
-		this._mouseinput.subscribe('mousemove', this._onMouseMove.bind(this), this._object.getId());
-		this.updateCoordinates();
+		this._mouseinput.subscribe('mousemove', this._onMouseMove.bind(this), this._object.getId()); */
+		this.updateCoordinates(); 
 	}
 	
 	TriggerPositionComponent.prototype = Object.create(GatePositionComponent.prototype);
 	TriggerPositionComponent.prototype.constructor = TriggerPositionComponent;
-	
-	TriggerPositionComponent.prototype.unsubscribeAll = function () {
+
+	/* TriggerPositionComponent.prototype.unsubscribeAll = function () {
 		this._mouseinput.unsubscribe('mousedown', this._object.getId());
 		this._mouseinput.unsubscribe('mouseup', this._object.getId());
 		this._mouseinput.unsubscribe('mousemove', this._object.getId());
-	};
+	}; */
 		
 	TriggerPositionComponent.prototype.isSecondQuadrantCoordinatesMatch = function(x, y) {
 		if (typeof x !== 'number' || typeof y !== 'number') {

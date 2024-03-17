@@ -1,5 +1,5 @@
 define(function () {
-    function GatePositionComponent(object, mouseinput, mutex) {
+    function GatePositionComponent(object, mouseinput, mutex, lockInput) {
 		this._object = object;
 		this._width = 20;
 		this._height = 40;
@@ -8,7 +8,9 @@ define(function () {
 		this._capturedDeltaX = 0;
 		this._capturedDeltaY = 0;
 		this._mutex = mutex;	//TODO is there mutex in js?
-		
+		this._lockInput = lockInput;
+		this._lockInput.addEventListener('change', this._onChange.bind(this));
+		this._isLock = this._lockInput.checked;
 		this._mouseinput = mouseinput;
 		this._mouseinput.subscribe('mousedown', this._onMouseDown.bind(this), this._object.getId());
 		this._mouseinput.subscribe('mouseup', this._onMouseUp.bind(this), this._object.getId());
@@ -16,6 +18,10 @@ define(function () {
 		this.updateCoordinates();
 	}
 
+	GatePositionComponent.prototype._onChange = function (e) {
+		this._isLock = this._lockInput.checked;
+	};
+	
 	GatePositionComponent.prototype.unsubscribeAll = function () {
 		this._mouseinput.unsubscribe('mousedown', this._object.getId());
 		this._mouseinput.unsubscribe('mouseup', this._object.getId());
@@ -54,7 +60,7 @@ define(function () {
 		if (typeof x !== 'number' || typeof y !== 'number') {
 			throw new Error('Invalid parameter x - ' + typeof x + '; y - ' + typeof y);
 		}
-		
+		if (this._isLock) return;
 		this._object.setX(x - this._capturedDeltaX);
 		this._object.setY(y - this._capturedDeltaY);
 		this.updateCoordinates();

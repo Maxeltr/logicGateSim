@@ -37,6 +37,9 @@ define(function () {
 		//do nothing
 	};
 	
+	BinaryInputInputsComponent.prototype.getInputState = function(wire) {
+		return false;
+	}
 	
 	return BinaryInputInputsComponent;
 });

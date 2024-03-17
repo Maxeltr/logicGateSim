@@ -38,6 +38,26 @@ define(function () {
 		}
 	};
 	
+	GateInputsComponent.prototype.getInputState = function(wire) {
+		let inputState = false;
+		if (typeof wire.getEnd0() !== 'undefined') {
+			if (this._object.getInvertedInputs().includes(wire.getId())) {
+				inputState = !wire.getEnd0().isActivated();
+			} else {
+				inputState = wire.getEnd0().isActivated();
+			}
+
+		} else {
+			if (this._object.getInvertedInputs().includes(wire.getId())) {
+				inputState = true;
+			} else {
+				inputState = false;
+			}
+		}
+		
+		return inputState;
+	};
+	
 	GateInputsComponent.prototype.getInput = function(id) {
 		return this._inputs.get(id);
 	};

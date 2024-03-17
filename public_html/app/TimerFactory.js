@@ -9,7 +9,7 @@ define([
 	'./TextInputComponentFactory'
 	], function (require, Timer) {
 	return {
-		create: function(id, mouseinput, mutex, x, y) {
+		create: function(id, mouseinput, mutex, x, y, type) {
 			let logicComponent = require('./TimerLogicComponentFactory');
 			let outputsComponent = require('./GateOutputsComponentFactory');
 			let inputsComponent = require('./TimerInputsComponentFactory');
@@ -18,7 +18,7 @@ define([
 			let textInputComponent = require('./TextInputComponentFactory');
 
 			let timer = new Timer(id, x, y);
-			timer.setLogicComponent(logicComponent.create(timer));
+			timer.setLogicComponent(logicComponent.create(timer, type));
 			timer.setOutputsComponent(outputsComponent.create(timer));
 			timer.setInputsComponent(inputsComponent.create(timer));
 			timer.setPositionComponent(positionComponent.create(timer, mouseinput, mutex));

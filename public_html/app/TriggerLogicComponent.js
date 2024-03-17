@@ -14,7 +14,7 @@ define(function () {
 		setInput = this._object.getSetInput();
 		
 		if (typeof resetInput !== 'undefined') {
-			if (typeof resetInput.getEnd0() !== 'undefined') {
+			/* if (typeof resetInput.getEnd0() !== 'undefined') {
 				if (this._object.getInvertedInputs().includes(resetInput.getId())) {
 					resetInputState = ! resetInput.getEnd0().isActivated();
 				} else {
@@ -26,11 +26,12 @@ define(function () {
 				} else {
 					resetInputState = false;
 				}
-			}
+			} */
+			resetInputState = this._object.getInputState(resetInput);
 		}
 		
 		if (typeof setInput !== 'undefined') {
-			if (typeof setInput.getEnd0() !== 'undefined') {
+			/* if (typeof setInput.getEnd0() !== 'undefined') {
 				if (this._object.getInvertedInputs().includes(setInput.getId())) {
 					setInputState = ! setInput.getEnd0().isActivated();
 				} else {
@@ -42,12 +43,12 @@ define(function () {
 				} else {
 					setInputState = false;
 				}
-			}
+			} */
+			setInputState = this._object.getInputState(setInput);
 		}
 		
 		if (resetInputState) {
 			this._outputState = false;
-			
 		} else if (setInputState) {
 			this._outputState = true;
 			

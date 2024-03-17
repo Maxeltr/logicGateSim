@@ -1,5 +1,5 @@
 define(['./TextInputComponent'], function (TextInputComponent) {
-    function WireTextInputComponent(object, mouseinput) {
+    function WireTextInputComponent(object, mouseinput, lockInput) {
 		TextInputComponent.apply(this, arguments);
 	}
 	
@@ -7,6 +7,7 @@ define(['./TextInputComponent'], function (TextInputComponent) {
 	WireTextInputComponent.prototype.constructor = WireTextInputComponent;
 	
 	WireTextInputComponent.prototype._onMouseDblClick = function(mouseInput) {
+		if (this._isLock) return;
 		let positionComponent = this._object.getPositionComponent();
 		let polyline = this._object.getCoordinates();
 		let length = polyline.length;

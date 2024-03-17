@@ -117,6 +117,10 @@ define(function () {
 	Gate.prototype.getInput = function(id) {
 		return this._inputsComponent.getInput(id);
 	};
+	
+	Gate.prototype.getInputState = function (wire) {
+		return this._inputsComponent.getInputState(wire);
+	};
 		
 	Gate.prototype.getOutputs = function () {
 		return this._outputsComponent.getOutputs();

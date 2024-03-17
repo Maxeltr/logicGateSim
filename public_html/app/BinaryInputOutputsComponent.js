@@ -1,8 +1,9 @@
 define(['./GateOutputsComponent'], function (GateOutputsComponent) {
     function BinaryInputOutputsComponent(object) {
-		this._object = object;
+		GateOutputsComponent.apply(this, arguments);
+		/* this._object = object;
 		this._outputs = new Map();
-		this._isOutputInverted = false;
+		this._isOutputInverted = false; */
 	}
 	
 	BinaryInputOutputsComponent.prototype = Object.create(GateOutputsComponent.prototype);

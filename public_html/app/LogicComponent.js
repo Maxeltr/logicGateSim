@@ -29,7 +29,7 @@ define(function () {
 		let result = true, inputState = false;
 		if (this._object.getInputs().size > 0 ) {
 			for (let wire of this._object.getInputs().values()) {
-				if (typeof wire.getEnd0() !== 'undefined') {
+				/* if (typeof wire.getEnd0() !== 'undefined') {
 					if (this._object.getInvertedInputs().includes(wire.getId())) {	//if wire is inverted
 						inputState = !wire.getEnd0().isActivated();
 					} else {
@@ -43,7 +43,9 @@ define(function () {
 						inputState = false;
 					}
 					result = result && inputState;
-				}
+				} */
+				inputState = this._object.getInputState(wire);
+				result = result && inputState;
 			}
 		} else {
 			result = false;
@@ -58,7 +60,7 @@ define(function () {
 		let result = false, inputState = false;
 		if (this._object.getInputs().size > 0 ) {
 			for (let wire of this._object.getInputs().values()) {
-				if (typeof wire.getEnd0() !== 'undefined') {
+				/* if (typeof wire.getEnd0() !== 'undefined') {
 					if (this._object.getInvertedInputs().includes(wire.getId())) {
 						inputState = !wire.getEnd0().isActivated();
 					} else {
@@ -72,7 +74,9 @@ define(function () {
 						inputState = false;
 					}
 					result = result || inputState;
-				}
+				} */
+				inputState = this._object.getInputState(wire);
+				result = result || inputState;
 			}
 		} else {
 			result = false;
@@ -83,9 +87,9 @@ define(function () {
 		return result;
 	};
 		
-	LogicComponent.prototype._getInputState = function() {
+/* 	LogicComponent.prototype._getInputState = function() {
 		
-	};
+	}; */
 	
 	LogicComponent.prototype.isActivated = function() {
 		return this._isActivated;

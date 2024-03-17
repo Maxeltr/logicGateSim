@@ -70,7 +70,7 @@ define(function () {
 		ctx.fillText('Save', 0, 285);
 		ctx.fillText('Load', 0, 300);
 		ctx.fillText('Traverse', 0, 315);
-		ctx.fillText('Erase', 0, 350);
+		ctx.fillText('Delete', 0, 350);
 		ctx.restore();
 	};
 	

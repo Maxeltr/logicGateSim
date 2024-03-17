@@ -1,5 +1,5 @@
 define(function () {
-    function WirePositionComponent(object, mouseinput, mutex, x, y, connectCallback) {
+    function WirePositionComponent(object, mouseinput, mutex, x, y, connectCallback, lockInput) {
 		this._object = object;
 		this._polyline = [x,y, x+30,y, x+30,y+50, x+40,y+50, x+40,y+50, x+60,y+50];
 		this._mutex = mutex;
@@ -17,11 +17,18 @@ define(function () {
 		this._mouseinput.subscribe('mousedown', this._onMouseDown.bind(this), this._object.getId());
 		this._mouseinput.subscribe('mouseup', this._onMouseUp.bind(this), this._object.getId());
 		this._mouseinput.subscribe('mousemove', this._onMouseMove.bind(this), this._object.getId());
+		this._lockInput = lockInput;
+		this._lockInput.addEventListener('change', this._onChange.bind(this));
+		this._isLock = this._lockInput.checked;
 		
 		if (typeof x !== 'number' || typeof y !== 'number') {
 			throw new Error('Invalid parameter x - ' + typeof x + '; y - ' + typeof y);
 		}
 	}
+	
+	WirePositionComponent.prototype._onChange = function (e) {
+		this._isLock = this._lockInput.checked;
+	};
 
 	WirePositionComponent.prototype.unsubscribeAll = function () {
 		this._mouseinput.unsubscribe('mousedown', this._object.getId());
@@ -123,6 +130,7 @@ define(function () {
 		if (typeof x !== 'number' || typeof y !== 'number') {
 			throw new Error('Invalid parameter x - ' + typeof x + '; y - ' + typeof y);
 		}
+		if (this._isLock) return;
 		this._polyline[0] = x;
 		this._polyline[1] = y;
 		this._polyline[3] = y;
@@ -132,6 +140,7 @@ define(function () {
 		if (typeof x !== 'number' || typeof y !== 'number') {
 			throw new Error('Invalid parameter x - ' + typeof x + '; y - ' + typeof y);
 		}
+		if (this._isLock) return;
 		this._polyline[this._polyline.length - 2] = x;
 		this._polyline[this._polyline.length - 1] = y;
 		this._polyline[this._polyline.length - 3] = y;
@@ -141,6 +150,7 @@ define(function () {
 		if (typeof x !== 'number' || typeof y !== 'number') {
 			throw new Error('Invalid parameter x - ' + typeof x + '; y - ' + typeof y);
 		}
+		if (this._isLock) return;
 		if (this._capturedStartOfPolyline === true) {
 			this.moveStartSegment(x, y);
 		} else if (this._capturedEndOfPolyline === true) {

@@ -1,16 +1,24 @@
 define(function () {
-    function TextInputComponent(object, mouseinput) {
+    function TextInputComponent(object, mouseinput, lockInput) {
 		this._object = object;
 		this._htmlInput;
 		this._mouseinput = mouseinput;
 		this._mouseinput.subscribe('dblclick', this._onMouseDblClick.bind(this), this._object.getId());
+		this._lockInput = lockInput;
+		this._lockInput.addEventListener('change', this._onChange.bind(this));
+		this._isLock = this._lockInput.checked;
 	}
 
+	TextInputComponent.prototype._onChange = function (e) {
+		this._isLock = this._lockInput.checked;
+	};
+	
 	TextInputComponent.prototype.unsubscribeAll = function () {
 		this._mouseinput.unsubscribe('dblclick', this._object.getId());
 	};
 	
 	TextInputComponent.prototype._onMouseDblClick = function(mouseInput) {
+		if (this._isLock) return;
 		if (this._object.isCoordinatesMatch(mouseInput.lastX(), mouseInput.lastY())) {
 			this._showInputHtmlElement(mouseInput.lastX(), mouseInput.lastY());
 		}

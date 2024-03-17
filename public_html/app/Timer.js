@@ -11,6 +11,8 @@ define(['./Gate'], function (Gate) {
 			this._logicComponent.setTimeSetting(parseFloat(propertyValue));
 		} else if (propertyName === 'name') {
 			this.setName(propertyValue + '');
+		} else if (propertyName === 'type') {
+			this.setType(propertyValue);
 		}
 	};
 	
