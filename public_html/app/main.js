@@ -7,11 +7,10 @@ define(function (require) {
 	
 	
 	let canvas = document.getElementById("schemaView");
-	let requestAnimationFrame = require('./RequestAnimationFrameFactory').create();
-	let render = require('./RenderFactory').create(requestAnimationFrame);
-    render.setCanvas(canvas);
-
 	let mouseInput = require('./MouseInputFactory').create(canvas);
+	let requestAnimationFrame = require('./RequestAnimationFrameFactory').create();
+	let render = require('./RenderFactory').create(requestAnimationFrame, mouseInput);
+    render.setCanvas(canvas);
     
 	let mutex = require('./MutexFactory').create();
 		

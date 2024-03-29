@@ -10,6 +10,10 @@ define(function () {
 		this._mouseClickObservers = new Map();
 		this._canvas;
 		this.t = Date.now();
+		this._scaleFactor = 1;
+		this._XShift = 0;
+		this._YShift = 0;
+		//this._affineMatrix = [1, 0, 0, 1, 0, 0];
 
 		if (typeof canvas === 'undefined') {
 			throw new Error('Invalid parameter');
@@ -60,11 +64,31 @@ define(function () {
 		this._updateLastXY(event);
 		this._notifyMouseClick(this);
 	};
-
+	
+	MouseInput.prototype.setScaleFactor = function (scale) {
+		this._scaleFactor = scale;
+	};
+	
+	MouseInput.prototype.setXShift = function (shift) {
+		this._XShift = shift;
+	};
+	
+	MouseInput.prototype.setYShift = function (shift) {
+		this._YShift = shift;
+	};
+	
+	/* MouseInput.prototype.setAffineMatrix = function (matrix) {
+		this._affineMatrix = matrix;
+	}; */
+	
 	MouseInput.prototype._updateLastXY = function (event) {
 		let rect = this._canvas.getBoundingClientRect();
-		this._lastX = event.clientX - rect.left;
-		this._lastY = event.clientY - rect.top;
+		this._lastX = Math.round(((event.clientX - rect.left) * this._scaleFactor)) - this._XShift;
+		this._lastY = Math.round(((event.clientY - rect.top) * this._scaleFactor)) - this._YShift;
+		/* let x = event.clientX - rect.left;
+		let y = event.clientY - rect.top;
+		this._lastX = x / this._affineMatrix[0] + y * this._affineMatrix[2] - this._affineMatrix[4];
+		this._lastY = x * this._affineMatrix[1] + y / this._affineMatrix[3] - this._affineMatrix[5]; */
 	};
 	
 	MouseInput.prototype.subscribe = function (e, fn, id) {
