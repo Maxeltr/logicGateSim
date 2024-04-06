@@ -2,12 +2,14 @@ define(function () {
 	function MouseInput(canvas) {
 		this._lastX;
 		this._lastY;
+		this._event;
 		this._isMouseDown = false;
 		this._mouseDownObservers = new Map();
 		this._mouseUpObservers = new Map();
 		this._mouseMoveObservers = new Map();
 		this._mouseDblClickObservers = new Map();
 		this._mouseClickObservers = new Map();
+		this._mouseWheelObservers = new Map();
 		this._canvas;
 		this.t = Date.now();
 		this._scaleFactor = 1;
@@ -24,8 +26,13 @@ define(function () {
 		this._canvas.addEventListener('mouseup', this._mouseUp.bind(this));
 		this._canvas.addEventListener('dblclick', this._mouseDblClick.bind(this));
 		this._canvas.addEventListener('click', this._mouseClick.bind(this));
+		this._canvas.addEventListener('wheel', this._onWheel.bind(this));
 	}
 
+	MouseInput.prototype.lastEvent = function () {
+		return this._event;
+	};
+	
 	MouseInput.prototype.lastX = function () {
 		return this._lastX;
 	};
@@ -38,30 +45,43 @@ define(function () {
 		return this._isMouseDown;
 	};
 
-	MouseInput.prototype._mouseDown = function (event) {
+	MouseInput.prototype._onWheel = function (e) {
+		this._event = e;
 		this._updateLastXY(event);
+		this._notifyMouseWheel(this);
+		e.preventDefault();
+	};
+	
+	MouseInput.prototype._mouseDown = function (e) {
+		this._event = e;
+		this._updateLastXY(e);
 		this._isMouseDown = true;
 		this._notifyMouseDown(this);
 	};
 	
-	MouseInput.prototype._mouseMove = function (event) {
-		this._updateLastXY(event);
+	MouseInput.prototype._mouseMove = function (e) {
+		this._event = e;
+		this._updateLastXY(e);
 		this._notifyMouseMove(this);
 	};
 	
-	MouseInput.prototype._mouseUp = function (event) {
-		this._updateLastXY(event);
+	MouseInput.prototype._mouseUp = function (e) {
+		this._event = e;
+		this._updateLastXY(e);
 		this._isMouseDown = false;
 		this._notifyMouseUp(this);
+		e.preventDefault();
 	};
 
-	MouseInput.prototype._mouseDblClick = function (event) {
-		this._updateLastXY(event);
+	MouseInput.prototype._mouseDblClick = function (e) {
+		this._event = e;
+		this._updateLastXY(e);
 		this._notifyMouseDblClick(this);
 	};
 
-	MouseInput.prototype._mouseClick = function (event) {
-		this._updateLastXY(event);
+	MouseInput.prototype._mouseClick = function (e) {
+		this._event = e;
+		this._updateLastXY(e);
 		this._notifyMouseClick(this);
 	};
 	
@@ -83,8 +103,8 @@ define(function () {
 	
 	MouseInput.prototype._updateLastXY = function (event) {
 		let rect = this._canvas.getBoundingClientRect();
-		this._lastX = Math.round(((event.clientX - rect.left) * this._scaleFactor)) - this._XShift;
-		this._lastY = Math.round(((event.clientY - rect.top) * this._scaleFactor)) - this._YShift;
+		this._lastX = Math.round(((event.clientX - rect.left - this._XShift) / this._scaleFactor));
+		this._lastY = Math.round(((event.clientY - rect.top - this._YShift) / this._scaleFactor));
 		/* let x = event.clientX - rect.left;
 		let y = event.clientY - rect.top;
 		this._lastX = x / this._affineMatrix[0] + y * this._affineMatrix[2] - this._affineMatrix[4];
@@ -103,6 +123,8 @@ define(function () {
 				this._mouseDblClickObservers.set(id, fn);
 			} else if (e === 'click') {
 				this._mouseClickObservers.set(id, fn);
+			} else if (e === 'wheel') {
+				this._mouseWheelObservers.set(id, fn);
 			} else {
 				throw new Error('Invalid parameter');
 			}
@@ -123,6 +145,8 @@ define(function () {
 				this._mouseDblClickObservers.delete(id);
 			} else if (e === 'click') {
 				this._mouseClickObservers.delete(id);
+			} else if (e === 'wheel') {
+				this._mouseWheelObservers.delete(id);
 			} else {
 				throw new Error('Invalid parameter');
 			}
@@ -157,6 +181,12 @@ define(function () {
 		
 	MouseInput.prototype._notifyMouseClick = function (data) {
 		for (let fn of this._mouseClickObservers.values()) {
+			fn(data);
+		}
+	};
+	
+	MouseInput.prototype._notifyMouseWheel = function (data) {
+		for (let fn of this._mouseWheelObservers.values()) {
 			fn(data);
 		}
 	};

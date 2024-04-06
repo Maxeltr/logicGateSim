@@ -37,6 +37,7 @@ define(function () {
 	};
 		
 	WirePositionComponent.prototype._onMouseDown = function(mouseInput) {
+		if (mouseInput.lastEvent().button !== 0) return;
 		let x = mouseInput.lastX();
 		let y = mouseInput.lastY();
 		if (this.isCoordinatesMatch(x, y)) {

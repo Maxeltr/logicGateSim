@@ -27,6 +27,7 @@ define(function () {
 		
 		MainLoop.prototype.loop = function (seconds) {
 			this._render.clearScreen();
+			this._render.drawAxises();
 			let ctx = this._render.getContext();
 			let objects = this._objectManager.getDrawObjects();
 			for (let i = 0; i < objects.length; i++) {
