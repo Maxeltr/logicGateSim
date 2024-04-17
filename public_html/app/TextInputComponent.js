@@ -20,7 +20,9 @@ define(function () {
 	TextInputComponent.prototype._onMouseDblClick = function(mouseInput) {
 		if (this._isLock) return;
 		if (this._object.isCoordinatesMatch(mouseInput.lastX(), mouseInput.lastY())) {
-			this._showInputHtmlElement(mouseInput.lastX(), mouseInput.lastY());
+			//this._showInputHtmlElement(mouseInput.lastX(), mouseInput.lastY());
+			let xy = mouseInput.getRawXY();
+			this._showInputHtmlElement(xy.x, xy.y);
 		}
 	};
 		

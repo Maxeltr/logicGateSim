@@ -37,11 +37,6 @@ define(function (require) {
 		this._canvasTopY = 0;
 		this._canvasBottomY = this._height;
 		
-/* 		this._screenLeftX = 0;
-		this._screenRightX = this._width;
-		this._screenTopY = 0;
-		this._screenBottomY = this._height; */
-		
 		this._currentScale = 1;
 		this._currentShiftX = 0;
 		this._currentShiftY = 0;
@@ -80,6 +75,7 @@ define(function (require) {
 	Render.prototype._onMouseDown = function (e) {
 		if (e.button === 1) {
 			e.preventDefault();
+			e.stopPropagation();
 			let rect = this._canvas.getBoundingClientRect();
 			let x = Math.round((e.clientX - rect.left));
 			let y = Math.round((e.clientY - rect.top ));
@@ -119,13 +115,15 @@ define(function (require) {
 		this._context.beginPath();
 		this._context.moveTo(0, 0);
 		this._context.lineTo(50, 0);
+		this._context.moveTo(51, 0);
 		this._context.lineTo(45, 5);
-		this._context.moveTo(50, 0);
+		this._context.moveTo(51, 0);
 		this._context.lineTo(45, -5);
 		this._context.moveTo(0, 0);
 		this._context.lineTo(0, 50);
+		this._context.moveTo(0, 51);
 		this._context.lineTo(5, 45);
-		this._context.moveTo(0, 50);
+		this._context.moveTo(0, 51);
 		this._context.lineTo(-5, 45);
 		this._context.stroke();
 	};
@@ -161,6 +159,7 @@ define(function (require) {
 	
 	Render.prototype._onWheel = function (e) {
 		e.preventDefault();
+		e.stopPropagation();
 		if (e.deltaY < 0) {
 			this._zoomIn();
 		} else {

@@ -8,31 +8,60 @@
 		<link rel="stylesheet" href="styles.css">
     </head>
     <body>
+	<table>
+		<tr>
+			<td>
+				
+			</td>
+			<td>
+				<label for="updateTime">Slow down</label> 
+				<input type="range" id="updateTime" name="updateTime" min="0" max="5" value="0" step="0.1"/>
+				<label for="drawWireNumbers">Wire numbers</label> 
+				<input type="checkbox" id="drawWireNumbers" name="drawWireNumbers"/>
+				<label for="lock">Lock</label> 
+				<input type="checkbox" id="lock" name="lock"/>
+				<button id="zoomIn" name="zoomIn">+</button>
+				<button id="zoomOut" name="zoomOut">-</button>
+				<button id="moveLeft" name="moveLeft">&#8592</button>
+				<button id="moveRight" name="moveRight">&#8594</button>
+				<button id="moveUp" name="moveUp">&#8593</button>
+				<button id="moveDown" name="moveDown">&#8595</button>
+				<button id="zoomNormal" name="zoomNormal">100%</button>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<button id="wire" name="wire" class="button">Wire</button>
+				<button id="bI" name="bI" class="button">BI</button>
+				<button id="and" name="and" class="button">AND</button>
+				<button id="or" name="or" class="button">OR</button>
+				<button id="timer" name="timer" class="button">Timer</button>
+				<button id="trigger" name="trigger" class="button">Trigger</button>
+				
+				<button id="save" name="save" class="button">Save</button>
+				<button id="load" name="load" class="button">Load</button>
+				<button id="traverse" name="traverse" class="button">Traverse</button>
+				<button id="delete" name="delete" class="button">Delete</button>
+			</td>
+			<td>
+				<canvas id = "schemaView" style = "border: ridge;"></canvas>
+			</td>
+		</tr>
+	</table>
+			
+		
 		<div>
-			<label for="updateTime">Slow down</label> 
-			<input type="range" id="updateTime" name="updateTime" min="0" max="5" value="0" step="0.1"/>
-			<label for="drawWireNumbers">Wire numbers</label> 
-			<input type="checkbox" id="drawWireNumbers" name="drawWireNumbers"/>
-			<label for="lock">Lock</label> 
-			<input type="checkbox" id="lock" name="lock"/>
-			<button id="zoomIn" name="zoomIn">+</button>
-			<button id="zoomOut" name="zoomOut">-</button>
-			<button id="moveLeft" name="moveLeft">&#8592</button>
-			<button id="moveRight" name="moveRight">&#8594</button>
-			<button id="moveUp" name="moveUp">&#8593</button>
-			<button id="moveDown" name="moveDown">&#8595</button>
-			<button id="zoomNormal" name="zoomNormal">100%</button>
+			<div>
+				<label class="noselect" style="display:block" for="equation">Equation</label> 
+				<textarea id="equation" style="width: 600px; height: 50px;"></textarea>
+			</div>
+			<div>
+				<label class="noselect" style="display:block" for="dataToSave">Data</label> 
+				<textarea id="dataToSave" style="width: 600px; height: 480px;"></textarea>
+			</div>
 		</div>
-        <div>
-            <canvas id = "schemaView" style = "border: ridge;"></canvas>
-        </div>
-		<div>
-			<label class="noselect" style="display:block" for="expression">Expression</label> 
-			<textarea id="expression" style="width: 600px; height: 50px;"></textarea>
-		</div>
-		<div>	
-			<label class="noselect" style="display:block" for="dataToSave">Data</label> 
-			<textarea id="dataToSave" style="width: 600px; height: 480px;"></textarea>
-		</div>
+		
+		
+		
     </body>
 </html>

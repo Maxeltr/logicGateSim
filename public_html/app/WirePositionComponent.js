@@ -191,7 +191,7 @@ define(function () {
 	};
 		
 	WirePositionComponent.prototype.isOnSegment = function (xp, yp, x1, y1, x2, y2) {		//TODO refactor (false positive occurs
-		
+		//console.log('xp=' + xp + '  yp=' + yp + '  x1=' + x1 + '  y1=' + y1 + '  x2=' +  x2 + '  y2=' + y2)
 		if (Math.abs(xp - x1) < this._marginBorder 
 				|| Math.abs(xp - x2) < this._marginBorder 
 				|| Math.abs(yp - y1) < this._marginBorder 

@@ -1,5 +1,5 @@
 define(function (require) {
-	function ObjectManager(mouseinput, render, mutex, expression) {
+	function ObjectManager(mouseinput, render, mutex, inputs) {
 		this._mouseinput;
 		this._gates = new Map();
 		this._links = new Map();
@@ -12,14 +12,43 @@ define(function (require) {
 		this._wire = require('./WireFactory'); 
 		this._mutex = mutex;
 		this._mouseinput = mouseinput;
-		this._expression = expression;
-		//this.index = 0;
-		//this.passedTime = 0;
-		//this.timeSlice = 0;
-		//this.objects;
-		//this.currentUpdate;
-		//this.amount = 0;
+		this._equation = inputs.get('equation');
+		this._objectToCreate = '';
+		this._objectToDelete = false;
+		this._radiusForDelete = 5;
+		
+		inputs.get('wire').addEventListener('click', this._onClickCreate.bind(this, 'wire'));
+		inputs.get('bi').addEventListener('click', this._onClickCreate.bind(this, 'BI'));
+		inputs.get('and').addEventListener('click', this._onClickCreate.bind(this, 'AND'));
+		inputs.get('or').addEventListener('click', this._onClickCreate.bind(this, 'OR'));
+		inputs.get('timer').addEventListener('click', this._onClickCreate.bind(this, 'timer'));
+		inputs.get('trigger').addEventListener('click', this._onClickCreate.bind(this, 'trigger'));
+		inputs.get('traverse').addEventListener('click', this.traverseMap.bind(this));
+		inputs.get('delete').addEventListener('click', this._onClickDelete.bind(this));
+		this._mouseinput.subscribe('mouseup', this.onMouseUp.bind(this), 'mouseUpObjectManager');
+		
 	}
+	
+	ObjectManager.prototype._onClickDelete = function () {
+		this._objectToDelete = true;
+	};
+	
+	ObjectManager.prototype._onClickCreate = function (objectToCreate) {
+		this._objectToCreate = objectToCreate;
+	};
+	
+	ObjectManager.prototype.onMouseUp = function () {
+		if (this._objectToCreate !== '') {
+			this.create(this._objectToCreate, this._mouseinput.lastX(), this._mouseinput.lastY());
+			this._objectToCreate = '';
+		}
+		if (this._objectToDelete === true) {
+			this.remove(this._mouseinput.lastX(), this._mouseinput.lastY());
+			
+		}
+		this._objectToDelete = false;
+	};
+	
 	
 	ObjectManager.prototype.connect = function (wire) {
 		if (! (wire instanceof Object)) return;			//TODO change to wire
@@ -120,8 +149,33 @@ define(function (require) {
 		this._links.clear();
 		this._binaryInputs.clear();
 	};
+	
+	ObjectManager.prototype.remove = function (x, y) {
+		for (let object of this._gates.values()) {
+			if (object.isCoordinatesMatch(x, y)) {
+				this._gates.delete(object.getId());
+				object.remove();
+				
+			}
+		}
 		
-	ObjectManager.prototype.remove = function (x1, x2, y1, y2) {
+		for (let object of this._binaryInputs.values()) {
+			if (object.isCoordinatesMatch(x, y)) {
+				this._binaryInputs.delete(object.getId());
+				object.remove();
+			}
+		}
+		
+		let poly, polyLength;
+		for (let object of this._links.values()) {
+			if (object.isCoordinatesMatch(x, y)){
+				this._links.delete(object.getId());
+				object.remove();
+			}
+		}
+	};
+	
+	/* ObjectManager.prototype.remove = function (x1, x2, y1, y2) {
 		for (let object of this._gates.values()) {
 			if (object.getX() < x2 && object.getY() > y1 && object.getY() < y2) {
 				this._gates.delete(object.getId());
@@ -146,7 +200,7 @@ define(function (require) {
 				object.remove();
 			}
 		}
-	};
+	}; */
 	
 	ObjectManager.prototype.create = function (name, x, y) {
 		if (typeof name !== 'string') {
@@ -194,7 +248,7 @@ define(function (require) {
 				if (typeof end1 === 'undefined') {
 					for (let gate of this._gates.values()) {
 						gate.resetIsVisited();
-						gate.setTraverseExpression('');
+						gate.setTraverseEquation('');
 					}
 					out += 'w' + wire.getEnd0().getUpdateNumber() + ' = ' + this._traverse(gate) + '\n';
 					
@@ -209,7 +263,7 @@ define(function (require) {
 	
 	ObjectManager.prototype._traverse = function(node) {
 		if (node.isVisited()) {
-			return node.getTraverseExpression().length === 0 ? 'w' + node.getUpdateNumber() : node.getTraverseExpression();
+			return node.getTraverseEquation().length === 0 ? 'w' + node.getUpdateNumber() : node.getTraverseEquation();
 		}
 		node.setIsVisited();
 		let tempVal = '';
@@ -218,7 +272,7 @@ define(function (require) {
 			let inversion = node.isInputInverted(wire.getId()) ? '!' : '';
 			if (typeof end0 !== 'undefined') {
 				if (end0.constructor.name === 'BinaryInput') {
-					tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + end0.getExpression() : inversion + end0.getExpression();
+					tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + end0.getEquation() : inversion + end0.getEquation();
 				} else {
 					tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + this._traverse(end0) : inversion + this._traverse(end0);
 				}
@@ -227,13 +281,13 @@ define(function (require) {
 			}
 		}
 		inversion = node.isOutputInverted() ? '!' : '';
-		node.setTraverseExpression(inversion + '(' + tempVal + ')');
+		node.setTraverseEquation(inversion + '(' + tempVal + ')');
 		
-		return node.getTraverseExpression();
+		return node.getTraverseEquation();
 	};
 	
 	ObjectManager.prototype._output = function (data) {
-		this._expression.value = data;
+		this._equation.value = data;
 	};
 	
 	return ObjectManager;

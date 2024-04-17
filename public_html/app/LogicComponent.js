@@ -5,8 +5,8 @@ define(function () {
 		this._type = 'AND';
 		this._reducingType = '&';
 		this._isActivated = false;
-		this._expression = '';
-		this._traverseExpression = '';
+		this._equation = '';
+		this._traverseEquation = '';
 		
 		if (typeof type !== 'string') {
 			throw new Error('Invalid parameter');
@@ -119,7 +119,7 @@ define(function () {
 		}
 	};
 	
-	LogicComponent.prototype.getExpression = function() {
+	LogicComponent.prototype.getEquation = function() {
 		let exp = '(', type;
 		/* if (this._type === 'AND') {
 			type = 'AND';
@@ -143,17 +143,17 @@ define(function () {
 		//exp = exp.length !== 1 ? exp + ')' : '';
 		exp = exp + ')'
 		if (this._object.isOutputInverted()) exp = '!' + exp;
-		this._expression = exp;
+		this._equation = exp;
 	
-		return this._expression;
+		return this._equation;
 	};
 	
-	LogicComponent.prototype.getTraverseExpression = function() {
-		return this._traverseExpression;
+	LogicComponent.prototype.getTraverseEquation = function() {
+		return this._traverseEquation;
 	};
 	
-	LogicComponent.prototype.setTraverseExpression = function(expr) {
-		this._traverseExpression = expr;
+	LogicComponent.prototype.setTraverseEquation = function(expr) {
+		this._traverseEquation = expr;
 	};
 	
 	return LogicComponent;

@@ -2,3 +2,9 @@
 	-ms-user-select: none;
 	user-select: none;
 }
+
+.button {
+	width: 55px;
+	font-size: 10px;
+	display: block;
+}

@@ -1,12 +1,14 @@
 define(function () {
-    function Serializer(objectManager) {
+    function Serializer(objectManager, inputs) {
         this._objectManager = objectManager;
 		this._links = new Map();
 		this._binaryInputs = new Map();
 		this._inputsToAddToGates = new Map();
 		this._outputsToAddToGates = new Map();
 		this._invertedGateInputs = new Map();
-
+		
+		inputs.get('save').addEventListener('click', this.save.bind(this));
+		inputs.get('load').addEventListener('click', this.load.bind(this));
     }
 
 	Serializer.prototype.save = function () {

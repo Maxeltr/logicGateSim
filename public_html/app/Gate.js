@@ -275,16 +275,16 @@ define(function () {
 		this._drawComponent.draw(ctx, debug, number);
 	};
 	
-	Gate.prototype.getExpression = function () {
-		return this._logicComponent.getExpression();
+	Gate.prototype.getEquation = function () {
+		return this._logicComponent.getEquation();
 	};
 	
-	Gate.prototype.getTraverseExpression = function() {
-		return this._logicComponent.getTraverseExpression();
+	Gate.prototype.getTraverseEquation = function() {
+		return this._logicComponent.getTraverseEquation();
 	};
 	
-	Gate.prototype.setTraverseExpression = function(expr) {
-		this._logicComponent.setTraverseExpression(expr);
+	Gate.prototype.setTraverseEquation = function(expr) {
+		this._logicComponent.setTraverseEquation(expr);
 	};
 	
 	return Gate;

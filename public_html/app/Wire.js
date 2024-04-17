@@ -110,7 +110,7 @@ define(function () {
 	};
 	
 	Wire.prototype.isCoordinatesMatch = function(x, y) {
-		this._positionComponent.isCoordinatesMatch(x, y);
+		return this._positionComponent.isCoordinatesMatch(x, y);
 	};
 	
 	Wire.prototype.remove = function() {

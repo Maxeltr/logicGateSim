@@ -7,7 +7,7 @@ define(function () {
 		this._availableTypes = [ON_DELAY, OFF_DELAY];
 		this._type = ON_DELAY;
 		this._reducingType = 'Ton';
-		this._traverseExpression = '';
+		this._traverseEquation = '';
 		this._offDelayOn = false;
 		
 		this.setType(type);
@@ -161,19 +161,19 @@ define(function () {
 		return this._reducingType;
 	};
 	
-	TimerLogicComponent.prototype.getExpression = function() {
+	TimerLogicComponent.prototype.getEquation = function() {
 		return 'Timer';
 	};
 	
-	TimerLogicComponent.prototype.getTraverseExpression = function() {
-		return this._traverseExpression;
+	TimerLogicComponent.prototype.getTraverseEquation = function() {
+		return this._traverseEquation;
 	};
 	
-	TimerLogicComponent.prototype.setTraverseExpression = function(expr) {
+	TimerLogicComponent.prototype.setTraverseEquation = function(expr) {
 		if (typeof expr !== 'string') {
 			throw new Error('Invalid parameter');
 		}
-		this._traverseExpression = expr;
+		this._traverseEquation = expr;
 	};
 	
 	return TimerLogicComponent;

@@ -18,11 +18,7 @@ define(function (require) {
 	
 	let serializer = require('./SerializerFactory').create(objectManager);
 	
-	let leftPanel = require('./LeftPanelFactory').create(mouseInput, objectManager, 40, 500, serializer);	
-	
-	
-	
-	let mainLoop = require('./MainLoopFactory').create(updateTime, render, objectManager, leftPanel);
+	let mainLoop = require('./MainLoopFactory').create(updateTime, render, objectManager);
 	render.start(mainLoop.loop);
    
 });

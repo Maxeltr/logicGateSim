@@ -1,8 +1,7 @@
 define(function () {
-    function MainLoop(updateTimeInput, render, objectManager, leftPanel) {
+    function MainLoop(updateTimeInput, render, objectManager) {
 		this._render = render;
 		this._objectManager = objectManager;
-		this._leftPanel = leftPanel;
 		this._updateTimeInput = updateTimeInput;
 		this._updateTimeInput.addEventListener('change', this._onChange.bind(this));
 		this._updateTime = 0;
@@ -33,7 +32,6 @@ define(function () {
 			for (let i = 0; i < objects.length; i++) {
 				objects[i].draw(ctx, true);
 			}
-			this._leftPanel.draw(ctx, true);
 						
 			if (this._updateTime === 0) {
 				objects = this._objectManager.getUpdateObjects();

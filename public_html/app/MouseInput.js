@@ -4,6 +4,7 @@ define(function () {
 		this._lastY;
 		this._event;
 		this._isMouseDown = false;
+		this._isMouseMoveWithPressedButtons = false;
 		this._mouseDownObservers = new Map();
 		this._mouseUpObservers = new Map();
 		this._mouseMoveObservers = new Map();
@@ -15,7 +16,6 @@ define(function () {
 		this._scaleFactor = 1;
 		this._XShift = 0;
 		this._YShift = 0;
-		//this._affineMatrix = [1, 0, 0, 1, 0, 0];
 
 		if (typeof canvas === 'undefined') {
 			throw new Error('Invalid parameter');
@@ -41,6 +41,13 @@ define(function () {
 		return this._lastY;
 	};
 
+	MouseInput.prototype.getRawXY = function () {
+		let rect = this._canvas.getBoundingClientRect();
+		let x = event.clientX - rect.left;
+		let y = event.clientY - rect.top;
+		return {'x': x, 'y': y};
+	};
+	
 	MouseInput.prototype.isMouseDown = function () {
 		return this._isMouseDown;
 	};
@@ -50,6 +57,7 @@ define(function () {
 		this._updateLastXY(event);
 		this._notifyMouseWheel(this);
 		e.preventDefault();
+		e.stopPropagation();
 	};
 	
 	MouseInput.prototype._mouseDown = function (e) {
@@ -57,11 +65,17 @@ define(function () {
 		this._updateLastXY(e);
 		this._isMouseDown = true;
 		this._notifyMouseDown(this);
+		this._isMouseMoveWithPressedButtons = false;
 	};
 	
 	MouseInput.prototype._mouseMove = function (e) {
 		this._event = e;
 		this._updateLastXY(e);
+		if (this._isMouseDown === true) {
+			this._isMouseMoveWithPressedButtons = true;
+		} else {
+			this._isMouseMoveWithPressedButtons = false;
+		}
 		this._notifyMouseMove(this);
 	};
 	
@@ -69,11 +83,14 @@ define(function () {
 		this._event = e;
 		this._updateLastXY(e);
 		this._isMouseDown = false;
+		//this._isMouseMoveWithPressedButtons = false;
 		this._notifyMouseUp(this);
 		e.preventDefault();
+		e.stopPropagation();
 	};
 
 	MouseInput.prototype._mouseDblClick = function (e) {
+		if (this._isMouseMoveWithPressedButtons === true) return;
 		this._event = e;
 		this._updateLastXY(e);
 		this._notifyMouseDblClick(this);
