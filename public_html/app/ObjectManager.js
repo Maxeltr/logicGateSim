@@ -21,6 +21,7 @@ define(function (require) {
 		inputs.get('bi').addEventListener('click', this._onClickCreate.bind(this, 'BI'));
 		inputs.get('and').addEventListener('click', this._onClickCreate.bind(this, 'AND'));
 		inputs.get('or').addEventListener('click', this._onClickCreate.bind(this, 'OR'));
+		inputs.get('xor').addEventListener('click', this._onClickCreate.bind(this, 'XOR'));
 		inputs.get('timer').addEventListener('click', this._onClickCreate.bind(this, 'timer'));
 		inputs.get('trigger').addEventListener('click', this._onClickCreate.bind(this, 'trigger'));
 		inputs.get('traverse').addEventListener('click', this.traverseMap.bind(this));
@@ -210,7 +211,7 @@ define(function (require) {
 			this.createBinaryInput(this.uuidv4(), x, y);
 		} else if (name === 'wire') {
 			this.createWire(this.uuidv4(), x, y);
-		} else if (name === 'AND' || name === 'OR' || name === '&' || name === '1') {
+		} else if (name === 'AND' || name === 'OR' || name === '&' || name === '1' || name === 'XOR') {
 			this.createGate(this.uuidv4(), x, y, name);
 		} else if (name === 'timer') {
 			this.createTimer(this.uuidv4(), x, y, name);

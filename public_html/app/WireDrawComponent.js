@@ -4,6 +4,9 @@ define(function () {
 		this._connectColor = 'black';	//nonactive, false, 0
 		this._unconnectColor = 'grey';
 		this._activatedColor = 'red';			//active, true, 1
+		this._end0Color = 'magenta';
+		this._end1Color = 'blue';
+		this._endRadius = 1;
 		this._drawNumber = false;
 		this._drawWireNumbersInput = drawWireNumbers;
 		this._drawWireNumbersInput.addEventListener('change', this._onChange.bind(this));
@@ -36,6 +39,23 @@ define(function () {
 			ctx.fillText(num, polyline[0] + 5, polyline[1]);
 			ctx.fillText(num, polyline[polyLength - 4 ] + 5, polyline[polyLength - 3]);
 		}
+		
+		if (typeof this._object.getEnd0() === 'undefined') {
+			ctx.beginPath();
+			ctx.moveTo(polyline[0], polyline[1] + this._endRadius);
+			ctx.arc(polyline[0], polyline[1], this._endRadius, Math.PI / 2, 2.5 * Math.PI, false);
+			ctx.fillStyle = this._end0Color;
+			ctx.fill();
+		}
+		
+		if (typeof this._object.getEnd1() === 'undefined') {
+			ctx.beginPath();
+			ctx.moveTo(polyline[polyLength - 2], polyline[polyLength - 1] + this._endRadius);
+			ctx.arc(polyline[polyLength - 2], polyline[polyLength - 1], this._endRadius, Math.PI / 2, 2.5 * Math.PI, false);
+			ctx.fillStyle = this._end1Color;
+			ctx.fill();
+		}
+		
 		ctx.restore();
 	};
 		

@@ -1,7 +1,7 @@
 define(function () {
     function LogicComponent(object, type) {
 		this._object = object;
-		this._availableTypes = ['AND', 'OR'];
+		this._availableTypes = ['AND', 'OR', 'XOR'];
 		this._type = 'AND';
 		this._reducingType = '&';
 		this._isActivated = false;
@@ -22,6 +22,8 @@ define(function () {
 			this._reducingType = '&';
 		} else if (this._type === 'OR') {
 			this._reducingType = '1';
+		} else if (this._type === 'XOR') {
+			this._reducingType = '=1';
 		}
 	};
 	
@@ -86,7 +88,24 @@ define(function () {
 		
 		return result;
 	};
+	
+	LogicComponent.prototype.xor = function () {								//TODO refactor
+		let result = false, inputState = false;
+		if (this._object.getInputs().size > 0 ) {
+			for (let wire of this._object.getInputs().values()) {
+				
+				inputState = this._object.getInputState(wire);
+				result = result ^ inputState;
+			}
+		} else {
+			result = false;
+		}
 		
+		if (this._object.isOutputInverted()) result = !result;
+		
+		return result;
+	};
+	
 /* 	LogicComponent.prototype._getInputState = function() {
 		
 	}; */
@@ -116,6 +135,8 @@ define(function () {
 			this._isActivated = this.and();
 		} else if (this._type === 'OR') {
 			this._isActivated = this.or();
+		} else if (this._type === 'XOR') {
+			this._isActivated = this.xor();
 		}
 	};
 	
