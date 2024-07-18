@@ -1,0 +1,148 @@
+
+Add Logic Symbols to a diagram
+
+Logic symbols, text can be added to the canvas by clicking the appropriate button on the Logic Symbols toolbar, then clicking the left mouse button on the canvas.  The symbol is added to the canvas at the mouse pointer location. 
+
+
+
+Add a Link to a diagram
+
+When a gate is created it has two inputs.  Additional connection points are automatically created as more links are added.  Position the target pointer over the input required and click the mouse button. The existing links will be displaced above the new connection as necessary.
+
+
+
+Binary Input Signal
+
+An Binary Input Signal is a signal that is an input to the diagram. 
+
+
+
+Canvas
+
+The background onto which components and symbols are placed to create a diagram.  Right click in an empty part of the canvas for the canvas pop-up menu.
+
+
+
+Diagram
+
+One or more components or symbols drawn on the canvas.
+
+
+
+Edit a Link
+
+Moving line sections of a link
+Position the selection pointer over the line section, then click and drag with the left mouse button held down.
+
+
+
+Gate Properties
+
+An AND gate requires that all inputs are TRUE for the output to be TRUE.
+An OR gate requires that one or more input is TRUE for the output to be TRUE.
+
+Invert input.  
+The input of the gate is inverted, when double clicked on the last section of connected to the input link.  An inverted input is indicated with a "bubble" on the gate input.
+
+Invert Output.  
+The output of the gate is inverted, when double clicked on the first section of connected to the output link.  An inverted output is indicated with a "bubble" on the gate output.
+
+
+
+Link
+
+A link (wire) provides a connection between two logic symbols. Links are added using the Link (Wire) button.
+
+
+
+Move a Component
+
+Placing the mouse pointer over one of the selected component. Then click and drag it to the new position with the left mouse button held down.
+
+
+
+Open an existing diagram
+
+Open the text file with saved diagram and copy whole text from it. Paste text to the Data textarea and click on the Load button.
+
+
+
+Panning
+
+Panning is enabled from the pan buttons.
+
+
+
+Rules For Linking Symbols
+
+Links can only be started from the output of a signal, gate and can only be ended on an input to a gate.
+Since signals can only be either an input or an output then the concept is somewhat different. In order to follow the convention adopted for gates and conditioners input signals are connected from the left, and output signals from the right. 
+
+
+
+Save
+
+Save the current diagram in text format. Click on the Save button and copy text from Data textarea. Create new text file and paste in it.
+
+
+
+Stacking Order
+
+Components and symbols are considered to be 'stacked' on the diagram in the order they were added or created.
+
+
+
+Scaling
+
+Scaling is making a component larger or smaller. Rotate the mouse wheel for the scaling.
+
+
+
+Timer Mode
+Each timer can be set as pick up or drop off.
+Enter command "time=" to set the pickup (dropoff) value (in seconds).
+
+On
+When an input signal goes high the timer waits for a time indicated by the pickup time before driving the output high.  If the input drops off whilst the pick up timer is in the process of expiring the timer immediately resets holding the output low. Enter command "type=on" to change timer mode.
+
+Off
+When the input signal goes high the timer output will be driven high.  When the input drops off the timer waits for the time indicated by the dropoff time before driving the output low.  If the input picks up again whilst the timer is in the process of expiring the timer immediately resets and continues to timeout holding the output high. Enter command "type=off" to change timer mode.
+
+
+
+Vertex
+
+A vertex is a point on a link where two line sections meet.
+
+
+
+Wire
+
+A wire (link) provides a connection between two logic symbols. Wires are added using the Wire (Link) button.
+
+
+
+Wire numbers
+
+Reveal numbering of the links (wires) in the diagram. 
+
+
+
+Zoom and Pan Tools
+
++ Zoom Increase
+Increases the Zoom magnification.
+
+- Zoom Decrease
+Decreases the Zoom magnification.
+
+100% Zoom to Fit
+Display at the normal magnification.
+
+Pan
+<- Shift the canvas to the left by one unit.
+-> Shift the canvas to the right by one unit.
+&#8593 Shift the canvas upwards by one unit.
+&#8595 Shift the canvas downwards by one unit.
+Hold down the midlle mouse button and drag the pointer across the diagram to pan.
+

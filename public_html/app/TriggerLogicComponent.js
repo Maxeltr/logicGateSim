@@ -14,45 +14,27 @@ define(function () {
 		setInput = this._object.getSetInput();
 		
 		if (typeof resetInput !== 'undefined') {
-			/* if (typeof resetInput.getEnd0() !== 'undefined') {
-				if (this._object.getInvertedInputs().includes(resetInput.getId())) {
-					resetInputState = ! resetInput.getEnd0().isActivated();
-				} else {
-					resetInputState = resetInput.getEnd0().isActivated();
-				}
-			} else {
-				if (this._object.getInvertedInputs().includes(resetInput.getId())) {
-					resetInputState = true;
-				} else {
-					resetInputState = false;
-				}
-			} */
 			resetInputState = this._object.getInputState(resetInput);
 		}
 		
 		if (typeof setInput !== 'undefined') {
-			/* if (typeof setInput.getEnd0() !== 'undefined') {
-				if (this._object.getInvertedInputs().includes(setInput.getId())) {
-					setInputState = ! setInput.getEnd0().isActivated();
-				} else {
-					setInputState = setInput.getEnd0().isActivated();
-				}
-			} else {
-				if (this._object.getInvertedInputs().includes(setInput.getId())) {
-					setInputState = true;
-				} else {
-					setInputState = false;
-				}
-			} */
 			setInputState = this._object.getInputState(setInput);
 		}
 		
-		if (resetInputState) {
-			this._outputState = false;
-		} else if (setInputState) {
-			this._outputState = true;
-			
+		if (this._object.getDominantInput() === 'reset') {
+			if (resetInputState) {
+				this._outputState = false;
+			} else if (setInputState) {
+				this._outputState = true;
+			}
+		} else {
+			if (setInputState) {
+				this._outputState = true;
+			} else if (resetInputState) {
+				this._outputState = false;
+			}
 		}
+		
 		
 		if (this._object.isOutputInverted()) {
 			this._isActivated = !this._outputState;

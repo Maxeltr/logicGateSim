@@ -18,9 +18,13 @@ define(['./GateDrawComponent'], function (GateDrawComponent) {
 		ctx.textBaseline = "bottom";
 		ctx.fillText(this._object.getReducingType(), this._object.getX(), this._object.getY());
 		ctx.fillText(this._object.getUpdateNumber() + ' ' + this._object.getName(), this._object.getLeftX(), this._object.getTopY());
-		ctx.fillText('S', this._object.getLeftX(), this._object.getTopY() + 17);
-		ctx.fillText('RD', this._object.getLeftX(), this._object.getBottomY() - 7);
-		
+		if (this._object.getDominantInput() === 'reset') {
+			ctx.fillText('S', this._object.getLeftX(), this._object.getTopY() + 17);
+			ctx.fillText('RD', this._object.getLeftX(), this._object.getBottomY() - 7);
+		} else {
+			ctx.fillText('SD', this._object.getLeftX(), this._object.getTopY() + 17);
+			ctx.fillText('R', this._object.getLeftX(), this._object.getBottomY() - 7);
+		}
 
 		if (this._object.isOutputInverted()) {
 			let outCoord = this._object.getOutputCoordinates();

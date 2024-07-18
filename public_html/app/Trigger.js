@@ -9,6 +9,8 @@ define(['./Gate'], function (Gate) {
 	Trigger.prototype.setOption = function (propertyName, propertyValue) {
 		if (propertyName === 'name') {
 			this.setName(propertyValue + '');
+		} else if (propertyName === 'dominant') {
+			this.setDominantInput(propertyValue);
 		}
 	};
 	
@@ -26,6 +28,14 @@ define(['./Gate'], function (Gate) {
 	
 	Trigger.prototype.setResetInput = function(wire) {
 		return this._inputsComponent.setResetInput(wire);
+	};
+	
+	Trigger.prototype.setDominantInput = function(value) {
+		return this._inputsComponent.setDominantInput(value);
+	};
+	
+	Trigger.prototype.getDominantInput = function() {
+		return this._inputsComponent.getDominantInput();
 	};
 	
 	return Trigger;

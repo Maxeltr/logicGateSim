@@ -3,6 +3,7 @@ define(['./GateInputsComponent'],function (GateInputsComponent) {
 		GateInputsComponent.apply(this, arguments);
 		this._setInputId = undefined;
 		this._resetInputId = undefined;
+		this._dominantInput = 'reset';
 	}
 	
 	TriggerInputsComponent.prototype = Object.create(GateInputsComponent.prototype);
@@ -65,6 +66,16 @@ define(['./GateInputsComponent'],function (GateInputsComponent) {
 			return true;
 		}
 		return false;
+	};
+	
+	TriggerInputsComponent.prototype.setDominantInput = function(value) {
+		if (value === 'reset' || value === 'set') {
+			this._dominantInput = value;
+		} 
+	};
+	
+	TriggerInputsComponent.prototype.getDominantInput = function() {
+		return this._dominantInput;
 	};
 	
 	return TriggerInputsComponent;
