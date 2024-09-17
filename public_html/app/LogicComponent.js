@@ -114,6 +114,10 @@ define(function () {
 		return this._isActivated;
 	};
 	
+	LogicComponent.prototype.isActivated = function(wire) {
+		return this._isActivated;
+	};
+	
 	LogicComponent.prototype.getType = function() {
 		return this._type;
 	};
@@ -129,8 +133,7 @@ define(function () {
 		}
 	};
 	
-	LogicComponent.prototype.update = function(seconds, updateNumber) {
-		this._object.setUpdateNumber(updateNumber);
+	LogicComponent.prototype.update = function(seconds) {
 		if (this._type === 'AND') {
 			this._isActivated = this.and();
 		} else if (this._type === 'OR') {

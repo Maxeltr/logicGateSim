@@ -15,6 +15,14 @@ define(function () {
 		}
 	};
 	
+	BinaryInputLogicComponent.prototype.isActivated = function(wire) {
+		if (this._object.isOutputInverted()) {
+			return ! this._isActivated;
+		} else {
+			return this._isActivated;
+		}
+	}
+	
 	BinaryInputLogicComponent.prototype.set = function() {
 		this._isActivated = true;
 	};
@@ -23,8 +31,8 @@ define(function () {
 		this._isActivated = false;
 	};
 	
-	BinaryInputLogicComponent.prototype.update = function(seconds, updateNumber) {
-		this._object.setUpdateNumber(updateNumber);
+	BinaryInputLogicComponent.prototype.update = function(seconds) {
+		
 	};
 	
 	BinaryInputLogicComponent.prototype.getType = function() {

@@ -3,7 +3,7 @@ define(function () {
 		this._object = object;
 		this._isActivated = false;
 		this._type = 'Trigger';
-		this._reducingType = 'RS';
+		this._reducingType = 'T';
 		this._outputState = false;
 		this._traverseEquation = '';
 	}
@@ -48,8 +48,11 @@ define(function () {
 		return this._isActivated;
 	};
 	
-	TriggerLogicComponent.prototype.update = function(seconds, updateNumber) {
-		this._object.setUpdateNumber(updateNumber);
+	TriggerLogicComponent.prototype.isActivated = function(wire) {
+		return this._isActivated;
+	};
+	
+	TriggerLogicComponent.prototype.update = function(seconds) {
 		this._getState();
 	};
 	

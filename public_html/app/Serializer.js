@@ -6,6 +6,8 @@ define(function () {
 		this._inputsToAddToGates = new Map();
 		this._outputsToAddToGates = new Map();
 		this._invertedGateInputs = new Map();
+		this._inputsToAddToBuses = new Map();
+		this._outputsToAddToBuses = new Map();
 		
 		inputs.get('save').addEventListener('click', this.save.bind(this));
 		inputs.get('load').addEventListener('click', this.load.bind(this));
@@ -71,6 +73,30 @@ define(function () {
 			dataToSave = dataToSave + '\n';
 		}
 		
+		for (let object of this._objectManager.buses().values()) {	//save buses
+			dataToSave = dataToSave 
+				+ object.constructor.name + ',' 
+				+ object.getId() + ',' 
+				+ object.getName().replace(/,/g,'') + ','
+				+ object.getType() + ','
+				dataToSave = dataToSave + 'outputs,';
+				object.getOutputs().forEach(
+					(v) => {dataToSave = dataToSave + v.getId() + ',';
+					dataToSave = dataToSave + object.getBusSegmentNumberForOutput(v) + ',';
+					dataToSave = dataToSave + object.getOutputName(v) + ',';
+				});
+				dataToSave = dataToSave + 'inputs,';
+				object.getInputs().forEach(
+					(v) => {dataToSave = dataToSave + v.getId() + ','
+					dataToSave = dataToSave + object.getBusSegmentNumberForInput(v) + ',';
+					dataToSave = dataToSave + object.getInputName(v) + ',';
+				});
+				dataToSave = dataToSave + 'coordinates,';
+				object.getCoordinates().forEach(v => dataToSave = dataToSave + v + ',');
+				dataToSave = dataToSave + '\n';
+				
+		}
+		
 		this._output(dataToSave);
 	};
 	
@@ -99,7 +125,7 @@ define(function () {
 		for (let i = 1; i < data.length; i++) {
 			this._deserealize(data[i]);
 		}
-		let binaryInput, lnk, gate, lnkId;
+		let binaryInput, lnk, gate, lnkId, bus;
 		for (let [bi, inputs] of this._binaryInputs) {
 			binaryInput = this._objectManager.binaryInputs().get(bi);
 			for (let i = 0; i < inputs.length; i++) {
@@ -144,7 +170,29 @@ define(function () {
 				gate.invertInput(inputs[i]);
 			}
 		}
+
+		for (let [busId, outputs] of this._outputsToAddToBuses) {
+			bus = this._objectManager.buses().get(busId);
+			for (let i = 0; i < outputs.length; i = i + 3) {
+				lnk = this._objectManager.links().get(outputs[i]);
+				bus.addWireToOutput(lnk);
+				lnk.setEnd0(bus);
+				bus.setBusSegmentNumberForOutput(outputs[i + 1], lnk);
+				bus.setOutputName(outputs[i + 2], lnk);
+			}
+		}
 		
+		for (let [busId, inputs] of this._inputsToAddToBuses) {
+			bus = this._objectManager.buses().get(busId);
+			for (let i = 0; i < inputs.length; i = i + 3) {
+				lnk = this._objectManager.links().get(inputs[i]);
+				bus.addWireToInputs(lnk);
+				lnk.setEnd1(bus);
+				bus.setBusSegmentNumberForInput(inputs[i + 1], lnk);
+				bus.setInputName(inputs[i + 2], lnk);
+			}
+			
+		}
 	};
 	
 	Serializer.prototype._deserealize = function (data) {
@@ -209,6 +257,20 @@ define(function () {
 			if (outputs.length > 0) this._outputsToAddToGates.set(object.getId(), outputs);
 			if (inputs.length > 0) this._inputsToAddToGates.set(object.getId(), inputs);
 			if (invertedInputs.length > 0) this._invertedGateInputs.set(object.getId(), invertedInputs);
+		} else if (row[0] === 'Bus') {
+			object = this._objectManager.createBus(row[1], -100, -100);
+			object.setName(row[2]);
+			let poly = [];
+			for (let i = row.indexOf('coordinates') + 1; i < row.length; i++) {
+				if (row[i] !== 'undefined' && row[i].length > 0) poly.push(parseInt(row[i]));	//x, y
+			}
+			object.setCoordinates(poly);
+			let outputs, inputs;
+			outputs = row.slice(row.indexOf('outputs') + 1, row.indexOf('inputs'));
+			inputs = row.slice(row.indexOf('inputs') + 1, row.indexOf('coordinates'));
+			if (outputs.length > 0) this._outputsToAddToBuses.set(object.getId(), outputs);
+			if (inputs.length > 0) this._inputsToAddToBuses.set(object.getId(), inputs);
+
 		}
 	};
 

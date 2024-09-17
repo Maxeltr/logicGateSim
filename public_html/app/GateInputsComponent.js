@@ -42,9 +42,9 @@ define(function () {
 		let inputState = false;
 		if (typeof wire.getEnd0() !== 'undefined') {
 			if (this._object.getInvertedInputs().includes(wire.getId())) {
-				inputState = !wire.getEnd0().isActivated();
+				inputState = !wire.getEnd0().isActivated(wire);
 			} else {
-				inputState = wire.getEnd0().isActivated();
+				inputState = wire.getEnd0().isActivated(wire);
 			}
 
 		} else {

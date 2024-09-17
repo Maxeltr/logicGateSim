@@ -37,7 +37,8 @@ define(function () {
 				objects = this._objectManager.getUpdateObjects();
 				this.amount = objects.length;
 				for (let i = 0; i < this.amount; i++) {
-					objects[i].update(seconds, i + 1);
+					objects[i].setUpdateNumber(i + 1);
+					objects[i].update(seconds);
 				}
 			} else {
 				this.slowUpdate(seconds);				
@@ -56,6 +57,7 @@ define(function () {
 		
 		if (this.passedTime > this.timeSlice) {
 			if (this.index < this.amount) {
+				this.objects[this.index].setUpdateNumber(this.index + 1);
 				this.objects[this.index].update(seconds, this.index + 1);
 				this.index++;
 			} else {

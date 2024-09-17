@@ -16,7 +16,7 @@ define(['./GateDrawComponent'], function (GateDrawComponent) {
 		ctx.lineTo(this._object.getLeftX(), this._object.getTopY());
 		
 		ctx.textBaseline = "bottom";
-		ctx.fillText(this._object.getReducingType(), this._object.getX(), this._object.getY());
+		ctx.fillText(this._object.getReducingType(), this._object.getX() + 5, this._object.getY());
 		ctx.fillText(this._object.getUpdateNumber() + ' ' + this._object.getName(), this._object.getLeftX(), this._object.getTopY());
 		if (this._object.getDominantInput() === 'reset') {
 			ctx.fillText('S', this._object.getLeftX(), this._object.getTopY() + 17);

@@ -36,7 +36,9 @@ define(function () {
 				num = 'w' + this._object.getEnd0().getUpdateNumber();
 			}
 			ctx.textBaseline = "bottom";
-			ctx.fillText(num, polyline[0] + 5, polyline[1]);
+			ctx.textAlign = 'right';
+			ctx.fillText(num, polyline[2] - 5, polyline[3]);
+			ctx.textAlign = 'left';
 			ctx.fillText(num, polyline[polyLength - 4 ] + 5, polyline[polyLength - 3]);
 		}
 		
@@ -63,7 +65,7 @@ define(function () {
 		if (typeof this._object.getEnd0() === 'undefined' && typeof this._object.getEnd1() === 'undefined') {
 			ctx.strokeStyle = this._unconnectColor;
 		} else {
-			if (typeof this._object.getEnd0() !== 'undefined' && this._object.getEnd0().isActivated()) {
+			if (typeof this._object.getEnd0() !== 'undefined' && this._object.getEnd0().isActivated(this._object)) {
 				ctx.strokeStyle = this._activatedColor;
 			} else {
 				ctx.strokeStyle = this._connectColor;

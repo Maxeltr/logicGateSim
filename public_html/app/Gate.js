@@ -62,8 +62,8 @@ define(function () {
 		return this._id;
 	};
 		
-	Gate.prototype.getOutputCoordinates = function (numberOutput) {
-		return this._positionComponent.getOutputCoordinates(numberOutput);
+	Gate.prototype.getOutputCoordinates = function (wire) {
+		return this._positionComponent.getOutputCoordinates(wire);
 	}; 
 	
 	Gate.prototype.getInputCoordinates = function (numberInput) {
@@ -148,6 +148,10 @@ define(function () {
 	
 	Gate.prototype.isActivated = function() {
 		return this._logicComponent.isActivated();
+	};
+	
+	Gate.prototype.isActivated = function(wire) {
+		return this._logicComponent.isActivated(wire);
 	};
 	
 	Gate.prototype.getLogicComponent = function () {

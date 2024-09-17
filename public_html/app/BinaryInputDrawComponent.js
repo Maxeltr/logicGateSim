@@ -39,7 +39,7 @@ define(function () {
 		if (this._object.getOutputs().size === 0) {
 			ctx.strokeStyle = this._unconnectColor;
 		} else {
-			if (this._object.getLogicComponent().isActivated()) {
+			if (this._object.isActivated()) {
 				ctx.strokeStyle = this._activeColor;
 			} else {
 				ctx.strokeStyle = this._connectColor;

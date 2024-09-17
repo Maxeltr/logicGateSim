@@ -4,12 +4,14 @@ define(function (require) {
 		this._gates = new Map();
 		this._links = new Map();
 		this._binaryInputs = new Map();
+		this._buses = new Map();
 		this._render = render;
 		this._gate = require('./GateFactory');
 		this._timer = require('./TimerFactory');
 		this._trigger = require('./TriggerFactory');
 		this._binaryInput = require('./BinaryInputFactory');
 		this._wire = require('./WireFactory'); 
+		this._bus = require('./BusFactory'); 
 		this._mutex = mutex;
 		this._mouseinput = mouseinput;
 		this._equation = inputs.get('equation');
@@ -18,6 +20,7 @@ define(function (require) {
 		this._radiusForDelete = 5;
 		
 		inputs.get('wire').addEventListener('click', this._onClickCreate.bind(this, 'wire'));
+		inputs.get('bus').addEventListener('click', this._onClickCreate.bind(this, 'bus'));
 		inputs.get('bi').addEventListener('click', this._onClickCreate.bind(this, 'BI'));
 		inputs.get('and').addEventListener('click', this._onClickCreate.bind(this, 'AND'));
 		inputs.get('or').addEventListener('click', this._onClickCreate.bind(this, 'OR'));
@@ -54,7 +57,9 @@ define(function (require) {
 	ObjectManager.prototype.connect = function (wire) {
 		if (! (wire instanceof Object)) return;			//TODO change to wire
 		let i = 1;
-		for (let gate of this._gates.values()) {
+		let connectable = Array.from(this._buses.values());
+		connectable = connectable.concat(Array.from(this._gates.values()));
+		for (let gate of connectable) {
 			let linkLength = wire.getCoordinates().length;
 			let coordinates = wire.getCoordinates();
 			if (gate.isRightSideCoordinatesMatch(coordinates[0], coordinates[1])) {
@@ -90,6 +95,10 @@ define(function (require) {
 
 	ObjectManager.prototype.binaryInputs = function () {
 		return this._binaryInputs;
+	};
+	
+	ObjectManager.prototype.buses = function () {
+		return this._buses;
 	};
 
 	ObjectManager.prototype.uuidv4 = function () {
@@ -129,6 +138,13 @@ define(function (require) {
 		this._links.set(id, object);
 		return object;
 	};
+	
+	ObjectManager.prototype.createBus = function (id, x, y) {
+		let bus = this._bus.create(id, this._mouseinput, this._mutex, x, y);
+		this._buses.set(id, bus);
+		//this._gates.set(id, bus);
+		return bus;
+	};
 
 	ObjectManager.prototype.createBinaryInput = function (id, x, y) {
 		let bi = this._binaryInput.create(id, this._mouseinput, this._mutex, x, y);
@@ -149,6 +165,7 @@ define(function (require) {
 		this._gates.clear();
 		this._links.clear();
 		this._binaryInputs.clear();
+		this._buses.clear();
 	};
 	
 	ObjectManager.prototype.remove = function (x, y) {
@@ -167,41 +184,20 @@ define(function (require) {
 			}
 		}
 		
-		let poly, polyLength;
 		for (let object of this._links.values()) {
 			if (object.isCoordinatesMatch(x, y)){
 				this._links.delete(object.getId());
 				object.remove();
 			}
 		}
+		
+		for (let object of this._buses.values()) {
+			if (object.isCoordinatesMatch(x, y)){
+				this._buses.delete(object.getId());
+				object.remove();
+			}
+		}
 	};
-	
-	/* ObjectManager.prototype.remove = function (x1, x2, y1, y2) {
-		for (let object of this._gates.values()) {
-			if (object.getX() < x2 && object.getY() > y1 && object.getY() < y2) {
-				this._gates.delete(object.getId());
-				object.remove();
-				
-			}
-		}
-		for (let object of this._binaryInputs.values()) {
-			if (object.getX() < x2 && object.getY() > y1 && object.getY() < y2) {
-				this._binaryInputs.delete(object.getId());
-				object.remove();
-			}
-		}
-		let poly, polyLength;
-		for (let object of this._links.values()) {
-			poly = object.getCoordinates();
-			polyLength = poly.length;
-			if ((poly[0] > x1 && poly[0] < x2 && poly[1] > y1 && poly[1] < y2) 
-					|| (poly[polyLength - 2] > x1 && poly[polyLength - 2] < x2 && poly[polyLength - 1] > y1 && poly[polyLength - 1] < y2)
-			){
-				this._links.delete(object.getId());
-				object.remove();
-			}
-		}
-	}; */
 	
 	ObjectManager.prototype.create = function (name, x, y) {
 		if (typeof name !== 'string') {
@@ -211,6 +207,8 @@ define(function (require) {
 			this.createBinaryInput(this.uuidv4(), x, y);
 		} else if (name === 'wire') {
 			this.createWire(this.uuidv4(), x, y);
+		} else if (name === 'bus') {
+			this.createBus(this.uuidv4(), x, y);
 		} else if (name === 'AND' || name === 'OR' || name === '&' || name === '1' || name === 'XOR') {
 			this.createGate(this.uuidv4(), x, y, name);
 		} else if (name === 'timer') {
@@ -223,8 +221,9 @@ define(function (require) {
 	};
 				
 	ObjectManager.prototype.getUpdateObjects = function() {
-		let objects = Array.from(this._gates.values());
-		objects = objects.concat(Array.from(this._binaryInputs.values()));
+		let objects = Array.from(this._binaryInputs.values());
+		objects = objects.concat(Array.from(this._buses.values()));
+		objects = objects.concat(Array.from(this._gates.values()));
 		
 		return objects;
 	};
@@ -233,6 +232,7 @@ define(function (require) {
 		let objects = Array.from(this._gates.values());
 		objects = objects.concat(Array.from(this._binaryInputs.values()));
 		objects = objects.concat(Array.from(this._links.values()));
+		objects = objects.concat(Array.from(this._buses.values()));
 		return objects;
 	};
 	
@@ -255,32 +255,59 @@ define(function (require) {
 					
 				}
 			}
-			
-			
-			//console.log(val);
 		}
 		this._output(out);
 	};
+	
+	ObjectManager.prototype._getEnd0OfWireThroughBus = function(wire) {
+		/* if (wire.constructor.name !== 'Wire') {
+			return wire;
+		} */
+		let end0 = wire.getEnd0();
+		if (typeof end0 !== 'undefined') {
+			if (end0.constructor.name === 'Bus') {
+				let input = end0.getInputWireByOutputWire(wire);
+				if (typeof input !== 'undefined') {
+					return this._getEnd0OfWireThroughBus(input);
+				}
+			} else { 
+				return end0;
+			}
+		}
+		return undefined;	
+	}
 	
 	ObjectManager.prototype._traverse = function(node) {
 		if (node.isVisited()) {
 			return node.getTraverseEquation().length === 0 ? 'w' + node.getUpdateNumber() : node.getTraverseEquation();
 		}
 		node.setIsVisited();
-		let tempVal = '';
+		let tempVal = '', inputWire, gate;
 		for (let wire of node.getInputs().values()) {
 			let end0 = wire.getEnd0();
 			let inversion = node.isInputInverted(wire.getId()) ? '!' : '';
 			if (typeof end0 !== 'undefined') {
 				if (end0.constructor.name === 'BinaryInput') {
 					tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + end0.getEquation() : inversion + end0.getEquation();
-				} else {
+				} else if (end0.constructor.name === 'Bus') {
+					gate = this._getEnd0OfWireThroughBus(wire);
+					if (typeof gate !== 'undefined') {
+						if (gate.constructor.name === 'BinaryInput') {
+							tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' '  + inversion + gate.getEquation() : inversion + gate.getEquation();
+						} else {
+							tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + this._traverse(gate) : inversion + this._traverse(gate);
+						}
+					} else {			//wire end0 is not connected. end0 is undefined
+						tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + gate : inversion + gate;
+					}
+				} else {	//end0 is not BI neither Bus
 					tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + this._traverse(end0) : inversion + this._traverse(end0);
 				}
 			} else {
-				tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + end0 : inversion + end0;
+				tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + end0 : inversion + end0;	//wire end0 is not connected. end0 is undefined
 			}
 		}
+		tempVal = tempVal.length !== 0 ?  tempVal : 'w' + node.getUpdateNumber()
 		inversion = node.isOutputInverted() ? '!' : '';
 		node.setTraverseEquation(inversion + '(' + tempVal + ')');
 		

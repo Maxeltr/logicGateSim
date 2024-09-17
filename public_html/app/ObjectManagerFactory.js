@@ -3,6 +3,7 @@ define(['./ObjectManager'], function (ObjectManager) {
 		create: function(mouseinput, render, mutex) {
 			let equation = document.getElementById("equation");
 			let wire = document.getElementById("wire");
+			let bus = document.getElementById("bus");
 			let bi = document.getElementById("bI");
 			let and = document.getElementById("and");
 			let or = document.getElementById("or");
@@ -15,6 +16,7 @@ define(['./ObjectManager'], function (ObjectManager) {
 			let inputs = new Map();
 			inputs.set('equation', equation);
 			inputs.set('wire', wire);
+			inputs.set('bus', bus);
 			inputs.set('bi', bi);
 			inputs.set('and', and);
 			inputs.set('or', or);

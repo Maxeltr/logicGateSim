@@ -70,32 +70,46 @@ define(function () {
 	WirePositionComponent.prototype._onMouseUp = function(mouseInput) {
 		let polyLength = this._polyline.length;
 		
-		if (this._captured && (typeof this._object.getEnd0() === 'undefined' || typeof this._object.getEnd1() === 'undefined')) {
-			this._connect(this._object);
-		}
-		
-		if (this._capturedStartOfPolyline && typeof this._object.getEnd0() !== 'undefined') {	//disconnect wire end0 from gate output
-			let gateOutputCoordinates = this._object.getEnd0().getOutputCoordinates();
-			if ((this._polyline[0] !== gateOutputCoordinates[0] || this._polyline[1] !== gateOutputCoordinates[1])) {
+		if (this._capturedStartOfPolyline) {
+			if (typeof this._object.getEnd0() !== 'undefined') {			//disconnect wire end0 from gate output
 				let end0 = this._object.getEnd0();
-				this._object.deleteEnd0();
-				end0.deleteWireFromOutput(this._object);
+				/* let gateOutputCoordinates = this._object.getEnd0().getOutputCoordinates();
+				if ((this._polyline[0] !== gateOutputCoordinates[0] || this._polyline[1] !== gateOutputCoordinates[1])) {
+					let end0 = this._object.getEnd0();
+					this._object.deleteEnd0();
+					end0.deleteWireFromOutput(this._object);
+				} */
+				if (! end0.isRightSideCoordinatesMatch(this._polyline[0], this._polyline[1])) {
+					let end0 = this._object.getEnd0();
+					this._object.deleteEnd0();
+					end0.deleteWireFromOutput(this._object);
+				}
+			} else {
+				this._connect(this._object);
 			}
 		}
 		
-		if (this._capturedEndOfPolyline && typeof this._object.getEnd1() !== 'undefined') {   //disconnect wire end1 from gate input
-			let end1 = this._object.getEnd1();
-			let leftX = end1.getLeftX();
-			let topY = end1.getTopY();
-			let bottomY = end1.getBottomY();
-			if ((Math.abs(this._polyline[polyLength - 2] - leftX) > this._marginBorder || this._polyline[polyLength - 1] > bottomY ||  this._polyline[polyLength - 1] < topY)) {
-				this._object.deleteEnd1();
-				end1.deleteWireFromInputs(this._object);
+		if (this._capturedEndOfPolyline) {
+			if (typeof this._object.getEnd1() !== 'undefined') {   		//disconnect wire end1 from gate input
+				let end1 = this._object.getEnd1();
+				/*let leftX = end1.getLeftX();
+				let topY = end1.getTopY();
+				let bottomY = end1.getBottomY();
+				if ((Math.abs(this._polyline[polyLength - 2] - leftX) > this._marginBorder || this._polyline[polyLength - 1] > bottomY ||  this._polyline[polyLength - 1] < topY)) {
+					this._object.deleteEnd1();
+					end1.deleteWireFromInputs(this._object);
+				} */
+				if (! end1.isLeftSideCoordinatesMatch(this._polyline[polyLength - 2], this._polyline[polyLength - 1])) {
+					this._object.deleteEnd1();
+					end1.deleteWireFromInputs(this._object);
+				}
+			} else {
+				this._connect(this._object);
 			}
 		}
 	
 		if (typeof this._object.getEnd0() !== 'undefined') {						//if Y of a wire not equal Y of gate output, then correct position		
-			let outputCoordinates = this._object.getEnd0().getOutputCoordinates();
+			let outputCoordinates = this._object.getEnd0().getOutputCoordinates(this._object);
 			if (this._polyline[1] !== outputCoordinates[1]) {
 				this._object.getEnd0().correctPosition();
 			}

@@ -27,6 +27,10 @@ define(function () {
 		return this._isActivated;
 	};
 	
+	TimerLogicComponent.prototype.isActivated = function(wire) {
+		return this._isActivated;
+	};
+	
 	TimerLogicComponent.prototype.setTimeSetting = function(time) {
 		this._settingTime = time;
 	};
@@ -127,8 +131,7 @@ define(function () {
 		return false;
 	}
 	
-	TimerLogicComponent.prototype.update = function(seconds, updateNumber) {
-		this._object.setUpdateNumber(updateNumber);
+	TimerLogicComponent.prototype.update = function(seconds) {
 		this._isActivated = this._start(seconds);
 	};
 	TimerLogicComponent.prototype.getType = function () {

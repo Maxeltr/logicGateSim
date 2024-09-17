@@ -146,7 +146,7 @@ define(function () {
 		return [this._object.getLeftX(), this._object.getTopY() + distanceBetweenInputs * numberInput];
 	};
 	
-	GatePositionComponent.prototype.getOutputCoordinates = function (numberOutput) {
+	GatePositionComponent.prototype.getOutputCoordinates = function (wire) {
 		return [this._object.getRightX(), this._object.getY()];
 	};
 
