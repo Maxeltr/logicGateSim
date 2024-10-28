@@ -92,8 +92,8 @@ define(function (require) {
 			let x = Math.round((e.clientX - rect.left));
 			let y = Math.round((e.clientY - rect.top));
 			this._dragEnd = {'x': x, 'y': y};
-			let shiftX = this._dragEnd.x - this._dragStart.x;
-			let shiftY = this._dragEnd.y - this._dragStart.y;
+			let shiftX = (this._dragEnd.x - this._dragStart.x) / this._currentScale;
+			let shiftY = (this._dragEnd.y - this._dragStart.y) / this._currentScale;
 			this._move(shiftX, shiftY);
 			this._dragStart = this._dragEnd;
 		}
@@ -160,10 +160,13 @@ define(function (require) {
 	Render.prototype._onWheel = function (e) {
 		e.preventDefault();
 		e.stopPropagation();
+		let rect = this._canvas.getBoundingClientRect();
+		let x = Math.round((e.clientX - rect.left));
+		let y = Math.round((e.clientY - rect.top));
 		if (e.deltaY < 0) {
-			this._zoomIn();
+			this._zoomIn(x, y);
 		} else {
-			this._zoomOut();
+			this._zoomOut(x, y);
 		}
 	};
 	
@@ -173,9 +176,15 @@ define(function (require) {
 		this._mouseInput.setScaleFactor(this._currentScale);
 	};
 	
-	Render.prototype._zoomIn = function () {
+	Render.prototype._zoomIn = function (x, y) {
 		let scale = this._scaleFactor;
 		this._zoom(scale);
+				
+		let canvasX = x - this._currentShiftX;
+		let canvasY = y - this._currentShiftY;
+		let shiftX = (canvasX - canvasX * scale) / this._currentScale;
+		let shiftY = (canvasY - canvasY * scale) / this._currentScale;
+		this._move(shiftX , shiftY);
 	};
 	
 	Render.prototype._zoomNormal = function () {
@@ -188,9 +197,15 @@ define(function (require) {
 		this._mouseInput.setYShift(this._currentShiftY);
 	};
 	
-	Render.prototype._zoomOut = function () {
+	Render.prototype._zoomOut = function (x, y) {
 		let scale = 1 / this._scaleFactor;
 		this._zoom(scale);
+		
+		let canvasX = x - this._currentShiftX;
+		let canvasY = y - this._currentShiftY;
+		let shiftX = (canvasX - canvasX * scale) / this._currentScale;
+		let shiftY = (canvasY - canvasY * scale) / this._currentScale;
+		this._move(shiftX , shiftY);
 	};
 	
 	Render.prototype._clearCanvas = function (scale) {
