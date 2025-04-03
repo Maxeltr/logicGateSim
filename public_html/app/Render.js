@@ -177,6 +177,10 @@ define(function (require) {
 	};
 	
 	Render.prototype._zoomIn = function (x, y) {
+		if (typeof(x) !== 'number' || typeof (y) !== 'number') {
+			x = 0;
+			y = 0;
+		}
 		let scale = this._scaleFactor;
 		this._zoom(scale);
 				
@@ -198,6 +202,10 @@ define(function (require) {
 	};
 	
 	Render.prototype._zoomOut = function (x, y) {
+		if (typeof(x) !== 'number' || typeof (y) !== 'number') {
+			x = 0;
+			y = 0;
+		}
 		let scale = 1 / this._scaleFactor;
 		this._zoom(scale);
 		
