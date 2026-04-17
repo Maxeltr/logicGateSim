@@ -66,7 +66,8 @@ define(function (require) {
 				if (wire.setEnd0(gate)) {
 					gate.addWireToOutput(wire);
 				}
-			} else if (gate.isLeftSideCoordinatesMatch(coordinates[linkLength - 2], coordinates[linkLength - 1])) {
+			} //else //add
+			if (gate.isLeftSideCoordinatesMatch(coordinates[linkLength - 2], coordinates[linkLength - 1])) {
 				if (wire.setEnd1(gate)) {
 					gate.addWireToInputs(wire);
 				}
@@ -122,7 +123,7 @@ define(function (require) {
 	};
 	
 	ObjectManager.prototype.createTimer = function (id, x, y, type) {
-		let timer = this._timer.create(id, this._mouseinput, this._mutex, x, y, 'On');
+		let timer = this._timer.create(id, this._mouseinput, this._mutex, x, y, type);	//add
 		this._gates.set(id, timer);
 		return timer;
 	};
@@ -286,25 +287,49 @@ define(function (require) {
 		for (let wire of node.getInputs().values()) {
 			let end0 = wire.getEnd0();
 			let inversion = node.isInputInverted(wire.getId()) ? '!' : '';
+			
+			let prepend = '', append = '', append2 =  '', timerPrepend= '', timerAppend = '', dominantInput;
+			let nodeType = node.getType();		//add
+			if (nodeType === 'Trigger') {
+				dominantInput = node.getDominantInput();
+				if (dominantInput == 'reset') {
+					prepend = '(';
+					append = ' OR w' + node.getUpdateNumber() + ')';
+					nodeType = 'AND !';
+				} else {
+					append = ' OR (w' + node.getUpdateNumber();
+					nodeType = 'AND !';
+					append2 =  ')'
+				}
+			} else if (nodeType === 'TON') {
+				timerPrepend = 'TON(';
+				timerAppend = ', ' + node.getTimeSetting() + ')'
+			}else if (nodeType === 'TOFF') {
+				timerPrepend = 'TOFF(';
+				timerAppend = ', ' + node.getTimeSetting() + ')'
+			}
+
 			if (typeof end0 !== 'undefined') {
 				if (end0.constructor.name === 'BinaryInput') {
-					tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + end0.getEquation() : inversion + end0.getEquation();
+					//tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + end0.getEquation() : inversion + end0.getEquation();
+					tempVal = tempVal.length !== 0 ? prepend + tempVal + append + ' ' + nodeType + ' ' + inversion + end0.getType() + end0.getUpdateNumber() + append2 : inversion + timerPrepend + end0.getType() + end0.getUpdateNumber() + timerAppend;
 				} else if (end0.constructor.name === 'Bus') {
 					gate = this._getEnd0OfWireThroughBus(wire);
 					if (typeof gate !== 'undefined') {
 						if (gate.constructor.name === 'BinaryInput') {
-							tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' '  + inversion + gate.getEquation() : inversion + gate.getEquation();
+							//tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' '  + inversion + gate.getEquation() : inversion + gate.getEquation();
+							tempVal = tempVal.length !== 0 ? prepend + tempVal + append + ' ' + nodeType + ' '  + inversion + gate.getType() + gate.getUpdateNumber() + append2 : inversion + timerPrepend + gate.getType() + gate.getUpdateNumber() + timerAppend;
 						} else {
-							tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + this._traverse(gate) : inversion + this._traverse(gate);
+							tempVal = tempVal.length !== 0 ? prepend + tempVal + append + ' ' + nodeType + ' ' + inversion + this._traverse(gate) + append2 : inversion + timerPrepend + this._traverse(gate) + timerAppend;
 						}
 					} else {			//wire end0 is not connected. end0 is undefined
-						tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + gate : inversion + gate;
+						tempVal = tempVal.length !== 0 ? prepend + tempVal + append + ' ' + nodeType + ' ' + inversion + gate + append2 : inversion + timerPrepend + gate + timerAppend;
 					}
 				} else {	//end0 is not BI neither Bus
-					tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + this._traverse(end0) : inversion + this._traverse(end0);
+					tempVal = tempVal.length !== 0 ? prepend + tempVal + append + ' ' + nodeType + ' ' + inversion + this._traverse(end0) + append2 : inversion + timerPrepend + this._traverse(end0) + timerAppend;
 				}
 			} else {
-				tempVal = tempVal.length !== 0 ? tempVal + ' ' + node.getType() + ' ' + inversion + end0 : inversion + end0;	//wire end0 is not connected. end0 is undefined
+				tempVal = tempVal.length !== 0 ? prepend + tempVal + append + ' ' + nodeType + ' ' + inversion + end0 + append2 : inversion + timerPrepend + end0 + timerAppend;	//wire end0 is not connected. end0 is undefined
 			}
 		}
 		tempVal = tempVal.length !== 0 ?  tempVal : 'w' + node.getUpdateNumber()

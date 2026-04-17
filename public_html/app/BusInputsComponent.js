@@ -75,7 +75,7 @@ define(['./GateInputsComponent'], function (GateInputsComponent) {
 		if (typeof wire.getEnd0() !== 'undefined') {
 			inputState = wire.getEnd0().isActivated(wire);
 		}
-		
+
 		return inputState;
 	};
 			

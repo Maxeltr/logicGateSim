@@ -51,9 +51,16 @@ define(['./GateInputsComponent'],function (GateInputsComponent) {
 	};
 	
 	TriggerInputsComponent.prototype.setSetInput = function(wire) {
-		if (typeof this._setInputId === 'undefined') {
+		if (typeof this._setInputId === 'undefined' && typeof this._resetInputId === 'undefined') {		//add
 			this._setInputId = wire.getId();
-			this._inputs.set(wire.getId(), wire);
+			this._inputs.set(this._setInputId, wire);
+			return true;
+		} else if (typeof this._setInputId === 'undefined' && typeof this._resetInputId !== 'undefined') {	//add
+			let resetInputWire = this._inputs.get(this._resetInputId);
+			this._inputs.clear();
+			this._setInputId = wire.getId();
+			this._inputs.set(this._setInputId, wire);
+			this._inputs.set(this._resetInputId, resetInputWire);
 			return true;
 		}
 		return false;

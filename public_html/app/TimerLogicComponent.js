@@ -13,7 +13,7 @@ define(function () {
 		this.setType(type);
 	}
 	
-	const ON_DELAY = 'On-delay', OFF_DELAY = 'Off-delay';
+	const ON_DELAY = 'TON', OFF_DELAY = 'TOFF';
 	
 	TimerLogicComponent.prototype._correctReducingType = function() {	
 		if (this._type === ON_DELAY) {
@@ -144,11 +144,13 @@ define(function () {
 			case 'on':
 			case 'On':
 			case 'ON':
+			case ON_DELAY:			//add
 				tempType = ON_DELAY;
 				break;
 			case 'off':
 			case 'Off':
 			case 'OFF':
+			case OFF_DELAY:				//add
 				tempType = OFF_DELAY;
 				break;
 			default:

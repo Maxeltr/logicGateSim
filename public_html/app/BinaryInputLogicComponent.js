@@ -47,7 +47,7 @@ define(function () {
 		this._type = type;
 	};
 	
-	BinaryInputLogicComponent.prototype.getEquation = function() {
+	BinaryInputLogicComponent.prototype.getEquation = function() {		//add del in all files
 		return 'BI' + this._object.getUpdateNumber();
 	};
 	

@@ -56,6 +56,7 @@ define(function () {
 				+ object.getX() + ','
 				+ object.getY() + ','
 				+ object.isOutputInverted() + ',';
+				if (object.constructor.name === 'Trigger') dataToSave = dataToSave + object.getDominantInput() + ',';		//add
 				if (object.constructor.name === 'Timer') dataToSave = dataToSave + object.getTimeSetting() + ',';	//if Timer
 			dataToSave = dataToSave + 'outputs,';
 			object.getOutputs().forEach(v => dataToSave = dataToSave + v.getId() + ',');
@@ -250,6 +251,7 @@ define(function () {
 			object = this._objectManager.createTrigger(row[1], parseInt(row[4]), parseInt(row[5]), row[3]);
 			object.setName(row[2]);
 			if (row[6] === 'true') object.invertOutput();
+			object.setDominantInput(row[7]);					//add
 			let outputs, inputs, invertedInputs;
 			outputs = row.slice(row.indexOf('outputs') + 1, row.indexOf('inputs'));
 			inputs = row.slice(row.indexOf('inputs') + 1, row.indexOf('invertedInputs'));

@@ -45,7 +45,7 @@ define(function () {
 		if (typeof this._object.getEnd0() === 'undefined') {
 			ctx.beginPath();
 			ctx.moveTo(polyline[0], polyline[1] + this._endRadius);
-			ctx.arc(polyline[0], polyline[1], this._endRadius, Math.PI / 2, 2.5 * Math.PI, false);
+			ctx.arc(polyline[0], polyline[1], this._endRadius, 0, 2 * Math.PI, false);		//add
 			ctx.fillStyle = this._end0Color;
 			ctx.fill();
 		}
@@ -53,7 +53,7 @@ define(function () {
 		if (typeof this._object.getEnd1() === 'undefined') {
 			ctx.beginPath();
 			ctx.moveTo(polyline[polyLength - 2], polyline[polyLength - 1] + this._endRadius);
-			ctx.arc(polyline[polyLength - 2], polyline[polyLength - 1], this._endRadius, Math.PI / 2, 2.5 * Math.PI, false);
+			ctx.arc(polyline[polyLength - 2], polyline[polyLength - 1], this._endRadius, 0, 2 * Math.PI, false);		//add
 			ctx.fillStyle = this._end1Color;
 			ctx.fill();
 		}

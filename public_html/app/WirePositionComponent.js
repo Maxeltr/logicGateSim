@@ -70,7 +70,7 @@ define(function () {
 	WirePositionComponent.prototype._onMouseUp = function(mouseInput) {
 		let polyLength = this._polyline.length;
 		
-		if (this._capturedStartOfPolyline) {
+		if (this._capturedStartOfPolyline && !this._isLock) {	//add
 			if (typeof this._object.getEnd0() !== 'undefined') {			//disconnect wire end0 from gate output
 				let end0 = this._object.getEnd0();
 				/* let gateOutputCoordinates = this._object.getEnd0().getOutputCoordinates();
@@ -89,7 +89,7 @@ define(function () {
 			}
 		}
 		
-		if (this._capturedEndOfPolyline) {
+		if (this._capturedEndOfPolyline && !this._isLock) {	//add
 			if (typeof this._object.getEnd1() !== 'undefined') {   		//disconnect wire end1 from gate input
 				let end1 = this._object.getEnd1();
 				/*let leftX = end1.getLeftX();

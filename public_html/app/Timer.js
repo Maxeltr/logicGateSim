@@ -28,5 +28,13 @@ define(['./Gate'], function (Gate) {
 		return this._logicComponent.getCurrentTime();
 	};
 	
+	Timer.prototype.setType = function(type) {	//add
+		this._logicComponent.setType(type);
+	};
+	
+	Timer.prototype.getType = function() {		//add
+		return this._logicComponent.getType();
+	};
+	
 	return Timer;
 });

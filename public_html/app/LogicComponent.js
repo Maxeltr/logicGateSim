@@ -55,7 +55,7 @@ define(function () {
 		
 		if (this._object.isOutputInverted()) result = !result;
 
-		return result;
+		return Boolean(result);		//add
 	};
 		
 	LogicComponent.prototype.or = function () {								//TODO refactor
@@ -86,7 +86,7 @@ define(function () {
 		
 		if (this._object.isOutputInverted()) result = !result;
 		
-		return result;
+		return Boolean(result);		//add
 	};
 	
 	LogicComponent.prototype.xor = function () {								//TODO refactor
@@ -103,7 +103,7 @@ define(function () {
 		
 		if (this._object.isOutputInverted()) result = !result;
 		
-		return result;
+		return Boolean(result);		//add
 	};
 	
 /* 	LogicComponent.prototype._getInputState = function() {
